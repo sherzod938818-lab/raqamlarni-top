@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: raqamlarni-top
+    runtime: node
+    rootDir: .
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
