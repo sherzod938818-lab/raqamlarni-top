@@ -9,31 +9,90 @@
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     font-family: 'Segoe UI', sans-serif;
-    background: #1a1a2e;
-    color: #fff;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    background: #1a1a2e; color: #fff;
+    width: 100%; height: 100%; overflow: hidden;
   }
   .screen {
-    display: none;
-    width: 100%;
-    height: 100vh;
-    padding: 12px 16px;
-    flex-direction: column;
+    display: none; width: 100%; height: 100vh;
+    padding: 12px 16px; flex-direction: column;
     align-items: center;
-    justify-content: center;
   }
   .screen.active { display: flex; }
+
   h1 { font-size: 20px; margin-bottom: 4px; text-align: center; }
-  .sub { color: #aaa; text-align: center; margin-bottom: 12px; font-size: 12px; }
+  .sub { color: #aaa; text-align: center; margin-bottom: 10px; font-size: 12px; }
+
   .btn {
     background: linear-gradient(135deg, #6c63ff, #3f3d9e);
     color: #fff; border: none; padding: 13px;
     border-radius: 12px; font-size: 15px; cursor: pointer;
-    width: 100%; margin: 5px 0; transition: transform 0.1s;
+    width: 100%; margin: 4px 0; transition: transform 0.1s;
   }
   .btn:active { transform: scale(0.97); }
+  .btn.secondary {
+    background: #16213e;
+    border: 1px solid #6c63ff44;
+  }
+
+  /* Lobby */
+  #screen-lobby { justify-content: flex-start; padding-top: 14px; }
+  .lobby-header {
+    width: 100%; display: flex;
+    justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .room-list {
+    width: 100%; flex: 1; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .room-card {
+    background: #16213e;
+    border: 1px solid #6c63ff33;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .room-card:active { border-color: #6c63ff; }
+  .room-card-info { display: flex; flex-direction: column; gap: 3px; }
+  .room-card-name { font-size: 15px; font-weight: bold; }
+  .room-card-host { font-size: 11px; color: #888; }
+  .room-card-join {
+    background: #6c63ff; color: #fff;
+    border: none; border-radius: 8px;
+    padding: 7px 14px; font-size: 13px; cursor: pointer;
+  }
+  .empty-rooms {
+    text-align: center; color: #444;
+    font-size: 13px; padding: 30px 0;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .modal {
+    background: #1a1a2e; border: 1px solid #6c63ff44;
+    border-radius: 16px; padding: 24px 20px;
+    width: 90%; max-width: 320px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .modal h2 { font-size: 18px; text-align: center; margin-bottom: 4px; }
+  .modal-input {
+    padding: 12px; border-radius: 10px;
+    background: #16213e; color: #fff;
+    border: 1px solid #6c63ff44; width: 100%;
+    font-size: 16px; text-align: center; outline: none;
+  }
+  .modal-input:focus { border-color: #6c63ff; }
+
+  /* Kutish */
+  #screen-wait { justify-content: center; }
   .anim-box { display: flex; gap: 10px; margin: 16px 0; }
   .digit-slot {
     width: 60px; height: 72px; background: #16213e;
@@ -49,7 +108,10 @@
     from { transform: scaleY(1); color: #6c63ff; }
     to { transform: scaleY(0.8); color: #ff6584; }
   }
-  .number-display { display: flex; gap: 8px; margin: 6px 0; }
+
+  /* Son tanlash */
+  #screen-choose { justify-content: center; }
+  .number-display { display: flex; gap: 8px; margin: 8px 0; }
   .num-box {
     width: 52px; height: 54px; background: #16213e;
     border-radius: 10px; display: flex; align-items: center;
@@ -72,7 +134,9 @@
     background: #6c63ff; grid-column: span 3;
     height: 44px; font-size: 14px; font-weight: bold;
   }
-  .numpad-btn.confirm:active { background: #5550dd; }
+
+  /* O'yin */
+  #screen-game { justify-content: flex-start; padding-top: 10px; }
   .chat-box {
     width: 100%; flex: 1; min-height: 0;
     background: #16213e; border-radius: 12px;
@@ -89,54 +153,66 @@
     justify-content: center; font-size: 14px; font-weight: bold;
   }
   .result-cell.open { background: rgba(255,255,255,0.32); }
-  .turn-bar { text-align: center; font-size: 12px; color: #666; padding: 3px 0; }
+  .turn-bar { font-size: 12px; color: #666; }
   .turn-bar.my-turn { color: #6c63ff; font-weight: bold; font-size: 13px; }
-  #screen-game { justify-content: flex-start; padding-top: 10px; }
+
+  /* Natija */
   #confetti-canvas {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%; pointer-events: none; z-index: 999;
   }
   .result-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: flex; align-items: center;
+    background: rgba(0,0,0,0.85); display: flex; align-items: center;
     justify-content: center; z-index: 998; flex-direction: column; gap: 16px;
   }
   .result-overlay h2 { font-size: 36px; }
-  .code-input {
-    padding: 11px; border-radius: 10px; background: #16213e;
-    color: #fff; border: 1px solid #6c63ff44; width: 100%;
-    font-size: 18px; text-align: center; letter-spacing: 4px;
-    margin: 8px 0; outline: none; text-transform: uppercase;
-  }
-  .divider { color: #333; font-size: 12px; margin: 6px 0; }
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
 
-<div class="screen active" id="screen-invite">
-  <h1>🎮 Raqamlarni Top</h1>
-  <p class="sub">Do'stingizni taklif qiling va 4 xonali sonini toping!</p>
-  <button class="btn" onclick="inviteFriend()">📨 Do'stni taklif qilish</button>
-  <div class="divider">— yoki xona kodini kiriting —</div>
-  <input class="code-input" id="room-input" placeholder="AB12CD34" maxlength="8">
-  <button class="btn" onclick="joinRoom()">🚪 Xonaga kirish</button>
+<!-- LOBBY -->
+<div class="screen active" id="screen-lobby">
+  <div class="lobby-header">
+    <h1>🎮 Raqamlarni Top</h1>
+    <button class="btn secondary" style="width:auto;padding:8px 12px;font-size:13px" onclick="shareGame()">🔗 Ulash</button>
+  </div>
+  <p class="sub" style="width:100%;text-align:left;margin-bottom:8px">Ochiq xonalar:</p>
+  <div class="room-list" id="room-list">
+    <div class="empty-rooms" id="empty-rooms">Hozircha ochiq xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
+  </div>
+  <button class="btn" onclick="showCreateModal()">➕ Xona yaratish</button>
 </div>
 
+<!-- XONA YARATISH MODAL -->
+<div class="modal-overlay" id="create-modal" style="display:none">
+  <div class="modal">
+    <h2>🏠 Yangi xona</h2>
+    <p class="sub">Xonaga nom bering</p>
+    <input class="modal-input" id="room-name-input" placeholder="Masalan: Sherzod" maxlength="20">
+    <button class="btn" onclick="createRoom()">✅ Xona yaratish</button>
+    <button class="btn secondary" onclick="hideCreateModal()">Bekor qilish</button>
+  </div>
+</div>
+
+<!-- KUTISH -->
 <div class="screen" id="screen-wait">
   <h1>⏳ Raqibni kuting</h1>
-  <p class="sub">Do'stingiz ulanishini kutmoqdasiz</p>
+  <p class="sub">Xonangiz ochiq — kimdir kirishini kuting</p>
   <div class="anim-box">
     <div class="digit-slot" id="d1">?</div>
     <div class="digit-slot" id="d2">?</div>
     <div class="digit-slot" id="d3">?</div>
     <div class="digit-slot" id="d4">?</div>
   </div>
-  <p class="sub">Xona kodi: <strong id="room-code-display" style="color:#6c63ff;font-size:20px;letter-spacing:3px"></strong></p>
+  <p class="sub">Xona: <strong id="room-name-display" style="color:#6c63ff"></strong></p>
+  <button class="btn secondary" style="width:200px;margin-top:10px" onclick="leaveRoom()">❌ Xonadan chiqish</button>
 </div>
 
+<!-- SON TANLASH -->
 <div class="screen" id="screen-choose">
-  <h1>🔢 Maxfiy sonni kiriting</h1>
+  <h1>🔢 Maxfiy son</h1>
   <p class="sub">Raqibingiz shu sonni topishga harakat qiladi</p>
   <div class="number-display">
     <div class="num-box" id="nb0">_</div>
@@ -160,6 +236,7 @@
   </div>
 </div>
 
+<!-- O'YIN -->
 <div class="screen" id="screen-game">
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:4px">
     <span style="font-size:15px;font-weight:bold">🕵️ Raqamni top!</span>
@@ -197,52 +274,50 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.disableVerticalSwipes?.();
 
-let ws, roomId, playerIndex, myNumber;
+let ws, roomId, playerIndex;
 let guessBuffer = [], chooseBuffer = [];
 let myTurn = false;
 const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
-const startParam = tg.initDataUnsafe?.start_param;
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function connect(onOpen) {
-  if (ws) ws.close();
+// WebSocket ulanish
+function connectWS() {
   ws = new WebSocket(WS_URL);
-  ws.onopen = onOpen;
+  ws.onopen = () => console.log('WS ulandi');
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
   ws.onerror = () => alert('Server bilan ulanishda xatolik!');
+  ws.onclose = () => {
+    setTimeout(connectWS, 2000); // avtomatik qayta ulanish
+  };
 }
-
-function inviteFriend() {
-  connect(() => ws.send(JSON.stringify({ type: 'create_room', username })));
-}
-
-function joinRoom() {
-  const code = document.getElementById('room-input').value.trim().toUpperCase();
-  if (code.length < 4) return alert('Xona kodini kiriting!');
-  connect(() => ws.send(JSON.stringify({ type: 'join_room', roomId: code, username })));
-}
+connectWS();
 
 function handleMessage(data) {
+  if (data.type === 'room_list') {
+    updateRoomList(data.rooms);
+  }
   if (data.type === 'room_created') {
     roomId = data.roomId;
     playerIndex = 0;
-    document.getElementById('room-code-display').textContent = roomId;
+    document.getElementById('room-name-display').textContent =
+      document.getElementById('room-name-input').value || username;
     showScreen('screen-wait');
     startDigitAnim();
-    const shareUrl = `https://t.me/raqamlarniTOPbot?startapp=${roomId}`;
-    tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('Men bilan Raqamlarni Top o\'ynaylik! 🎮')}`);
   }
   if (data.type === 'room_joined') {
     roomId = data.roomId;
     playerIndex = data.playerIndex;
+  }
+  if (data.type === 'opponent_joined') {
     showScreen('screen-choose');
   }
-  if (data.type === 'error') alert(data.msg);
-  if (data.type === 'opponent_joined') showScreen('screen-choose');
+  if (data.type === 'error') {
+    alert(data.msg);
+  }
   if (data.type === 'game_start') {
     myTurn = data.yourTurn;
     showScreen('screen-game');
@@ -258,10 +333,73 @@ function handleMessage(data) {
   }
   if (data.type === 'opponent_left') {
     alert('Raqibingiz o\'yindan chiqdi!');
-    location.reload();
+    roomId = null; playerIndex = null;
+    showScreen('screen-lobby');
   }
 }
 
+function updateRoomList(rooms) {
+  const list = document.getElementById('room-list');
+  const empty = document.getElementById('empty-rooms');
+  // Eski kartochkalarni o'chirish
+  list.querySelectorAll('.room-card').forEach(c => c.remove());
+  if (rooms.length === 0) {
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    rooms.forEach(room => {
+      const card = document.createElement('div');
+      card.className = 'room-card';
+      card.innerHTML = `
+        <div class="room-card-info">
+          <div class="room-card-name">🏠 ${room.name}</div>
+          <div class="room-card-host">${room.host} kutmoqda</div>
+        </div>
+        <button class="room-card-join" onclick="joinRoom('${room.id}')">Kirish</button>
+      `;
+      list.appendChild(card);
+    });
+  }
+}
+
+// Xona yaratish modal
+function showCreateModal() {
+  document.getElementById('create-modal').style.display = 'flex';
+  document.getElementById('room-name-input').value = username;
+  document.getElementById('room-name-input').focus();
+}
+function hideCreateModal() {
+  document.getElementById('create-modal').style.display = 'none';
+}
+
+function createRoom() {
+  const name = document.getElementById('room-name-input').value.trim() || username;
+  hideCreateModal();
+  ws.send(JSON.stringify({ type: 'create_room', username, name }));
+}
+
+function joinRoom(id) {
+  ws.send(JSON.stringify({ type: 'join_room', roomId: id, username }));
+  showScreen('screen-choose');
+}
+
+function leaveRoom() {
+  if (ws) ws.close();
+  roomId = null;
+  chooseBuffer = [];
+  showScreen('screen-lobby');
+  connectWS();
+}
+
+// O'yin havolasini ulashish
+function shareGame() {
+  const url = 'https://t.me/raqamlarniTOPbot';
+  tg.openTelegramLink(
+    `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Raqamlarni Top o\'ynaylik! 🎮 Shu botga kir va menga qo\'shil!')}`
+  );
+}
+
+// Digit animatsiya
 function startDigitAnim() {
   ['d1','d2','d3','d4'].forEach(id => {
     setInterval(() => {
@@ -270,6 +408,7 @@ function startDigitAnim() {
   });
 }
 
+// Son tanlash
 function numPress(n) { if (chooseBuffer.length < 4) { chooseBuffer.push(n); updateChooseDisplay(); } }
 function numDel() { chooseBuffer.pop(); updateChooseDisplay(); }
 function updateChooseDisplay() {
@@ -281,14 +420,14 @@ function updateChooseDisplay() {
 }
 function confirmNumber() {
   if (chooseBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  myNumber = chooseBuffer.join('');
-  ws.send(JSON.stringify({ type: 'set_number', number: myNumber }));
+  ws.send(JSON.stringify({ type: 'set_number', number: chooseBuffer.join('') }));
   const btn = document.getElementById('confirm-btn');
   btn.textContent = '⏳ Raqib ham son kirityapti...';
   btn.disabled = true;
   btn.style.opacity = '0.6';
 }
 
+// Taxmin
 function guessPress(n) { if (myTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
 function guessDel() { guessBuffer.pop(); updateGuessDisplay(); }
 function updateGuessDisplay() {
@@ -332,15 +471,21 @@ function addChatMessage(data) {
 function showWin() {
   const o = document.createElement('div');
   o.className = 'result-overlay';
-  o.innerHTML = '<h2>🎉 G\'aldingiz!</h2><button class="btn" onclick="location.reload()" style="width:220px">Qayta o\'ynash</button>';
+  o.innerHTML = '<h2>🎉 Siz yutdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
   document.body.appendChild(o);
   startConfetti();
 }
 function showLose() {
   const o = document.createElement('div');
   o.className = 'result-overlay';
-  o.innerHTML = '<h2>💔 Yutqizdingiz!</h2><button class="btn" onclick="location.reload()" style="width:220px">Qayta o\'ynash</button>';
+  o.innerHTML = '<h2>💔 Yutqizdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
   document.body.appendChild(o);
+}
+function backToLobby() {
+  document.querySelectorAll('.result-overlay').forEach(o => o.remove());
+  roomId = null; playerIndex = null;
+  chooseBuffer = []; guessBuffer = [];
+  showScreen('screen-lobby');
 }
 
 function startConfetti() {
@@ -364,11 +509,6 @@ function startConfetti() {
     requestAnimationFrame(draw);
   }
   draw();
-}
-
-// Do'st havoladan kirsa — avtomatik join
-if (startParam) {
-  connect(() => ws.send(JSON.stringify({ type: 'join_room', roomId: startParam, username })));
 }
 </script>
 </body>
