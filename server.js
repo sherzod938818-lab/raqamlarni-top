@@ -1,15 +1,27 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const WebSocket = require('ws');
-const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const BOT_TOKEN = process.env.BOT_TOKEN;
 
-const wss = new WebSocket.Server({ port: PORT });
+const server = http.createServer((req, res) => {
+  const filePath = path.join(__dirname, 'index.html');
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('Not found');
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(data);
+  });
+});
 
-// Xonalar: { roomId: { players: [ws1, ws2], numbers: [null, null], guesses: [], currentTurn: 0 } }
+const wss = new WebSocket.Server({ server });
+
 const rooms = {};
-const playerRoom = new Map(); // ws -> roomId
+const playerRoom = new Map();
 
 function sendTo(ws, data) {
   if (ws.readyState === WebSocket.OPEN) {
@@ -131,4 +143,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-console.log(`Server started on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+});
