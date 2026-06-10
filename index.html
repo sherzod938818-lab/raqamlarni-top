@@ -279,7 +279,7 @@
 </div>
 
 <script>
-const WS_URL = 'wss://raqamlarni-top.onrender.com';
+const WS_URL = location.hostname === 'localhost' ? 'ws://localhost:3000' : 'wss://raqamlarni-top.onrender.com';
 const tg = window.Telegram.WebApp;
 tg.expand();
 
