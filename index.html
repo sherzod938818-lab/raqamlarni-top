@@ -5,186 +5,229 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Raqamlarni Top</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #1a1a2e;
-    color: #fff;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  .screen {
-    display: none;
-    width: 100%;
-    height: 100vh;
-    padding: 12px 16px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .screen.active { display: flex; }
-  h1 { font-size: 20px; margin-bottom: 4px; text-align: center; }
-  .sub { color: #aaa; text-align: center; margin-bottom: 12px; font-size: 12px; }
-  .btn {
-    background: linear-gradient(135deg, #6c63ff, #3f3d9e);
-    color: #fff; border: none; padding: 13px;
-    border-radius: 12px; font-size: 15px; cursor: pointer;
-    width: 100%; margin: 5px 0; transition: transform 0.1s;
-  }
-  .btn:active { transform: scale(0.97); }
-  .anim-box { display: flex; gap: 10px; margin: 16px 0; }
-  .digit-slot {
-    width: 60px; height: 72px; background: #16213e;
-    border-radius: 12px; display: flex; align-items: center;
-    justify-content: center; font-size: 34px; font-weight: bold;
-    color: #6c63ff; border: 2px solid #6c63ff44;
-    animation: flip 0.6s infinite alternate;
-  }
-  .digit-slot:nth-child(2) { animation-delay: 0.15s; }
-  .digit-slot:nth-child(3) { animation-delay: 0.3s; }
-  .digit-slot:nth-child(4) { animation-delay: 0.45s; }
-  @keyframes flip {
-    from { transform: scaleY(1); color: #6c63ff; }
-    to { transform: scaleY(0.8); color: #ff6584; }
-  }
-  .number-display { display: flex; gap: 8px; margin: 6px 0; }
-  .num-box {
-    width: 52px; height: 54px; background: #16213e;
-    border-radius: 10px; display: flex; align-items: center;
-    justify-content: center; font-size: 26px; font-weight: bold;
-    color: #555; border: 2px solid #ffffff11; transition: all 0.15s;
-  }
-  .num-box.filled { border-color: #6c63ff; color: #fff; }
-  .numpad {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 7px; width: 100%; max-width: 280px; margin-top: 8px;
-  }
-  .numpad-btn {
-    background: #16213e; color: #fff; border: 1px solid #ffffff08;
-    padding: 0; height: 50px; border-radius: 10px;
-    font-size: 20px; cursor: pointer; transition: background 0.1s;
-  }
-  .numpad-btn:active { background: #6c63ff; }
-  .numpad-btn.del { background: #1e0a1e; color: #ff6584; font-size: 18px; }
-  .numpad-btn.confirm {
-    background: #6c63ff; grid-column: span 3;
-    height: 44px; font-size: 14px; font-weight: bold;
-  }
-  .numpad-btn.confirm:active { background: #5550dd; }
-  .chat-box {
-    width: 100%; flex: 1; min-height: 0;
-    background: #16213e; border-radius: 12px;
-    overflow-y: auto; padding: 10px; margin: 6px 0;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .msg { padding: 7px 11px; border-radius: 10px; max-width: 88%; font-size: 13px; }
-  .msg.me { background: #6c63ff; align-self: flex-end; border-bottom-right-radius: 2px; }
-  .msg.opponent { background: #0f3460; align-self: flex-start; border-bottom-left-radius: 2px; }
-  .result-row { display: flex; gap: 5px; margin-top: 5px; }
-  .result-cell {
-    width: 28px; height: 30px; background: rgba(255,255,255,0.12);
-    border-radius: 5px; display: flex; align-items: center;
-    justify-content: center; font-size: 14px; font-weight: bold;
-  }
-  .result-cell.open { background: rgba(255,255,255,0.32); }
-  .turn-bar { text-align: center; font-size: 12px; color: #666; padding: 3px 0; }
-  .turn-bar.my-turn { color: #6c63ff; font-weight: bold; font-size: 13px; }
-  #screen-game { justify-content: flex-start; padding-top: 10px; }
-  #confetti-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; pointer-events: none; z-index: 999;
-  }
-  .result-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: flex; align-items: center;
-    justify-content: center; z-index: 998; flex-direction: column; gap: 16px;
-  }
-  .result-overlay h2 { font-size: 36px; }
-  .code-input {
-    padding: 11px; border-radius: 10px; background: #16213e;
-    color: #fff; border: 1px solid #6c63ff44; width: 100%;
-    font-size: 18px; text-align: center; letter-spacing: 4px;
-    margin: 8px 0; outline: none; text-transform: uppercase;
-  }
-  .divider { color: #333; font-size: 12px; margin: 6px 0; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  font-family: 'Segoe UI', sans-serif;
+  background:#1a1a2e;
+  color:#fff;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+.screen {
+  display:none;
+  width:100%;
+  height:100vh;
+  padding:12px 16px;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.screen.active { display:flex; }
+
+h1 { font-size:20px; margin-bottom:6px; text-align:center; }
+.sub { color:#aaa; font-size:12px; margin-bottom:10px; text-align:center; }
+
+.btn {
+  background:linear-gradient(135deg,#6c63ff,#3f3d9e);
+  color:#fff; border:none;
+  padding:13px;
+  border-radius:12px;
+  font-size:15px;
+  width:100%;
+  margin:5px 0;
+}
+
+.btn:active { transform:scale(0.97); }
+
+.input {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #6c63ff44;
+  background:#16213e;
+  color:#fff;
+  text-align:center;
+  letter-spacing:3px;
+}
+
+/* ROOM LIST */
+.room-list {
+  width:100%;
+  max-height:45vh;
+  overflow-y:auto;
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.room-item {
+  background:#16213e;
+  padding:10px;
+  border-radius:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.room-item button {
+  background:#6c63ff;
+  border:none;
+  padding:6px 10px;
+  border-radius:8px;
+  color:#fff;
+}
+
+/* GAME UI (original saqlangan) */
+.chat-box {
+  width:100%;
+  flex:1;
+  background:#16213e;
+  border-radius:12px;
+  overflow-y:auto;
+  padding:10px;
+  margin:6px 0;
+}
+
+.msg { padding:7px 11px; border-radius:10px; margin-bottom:6px; }
+
+.msg.me { background:#6c63ff; align-self:flex-end; }
+.msg.opponent { background:#0f3460; }
+
+.number-display { display:flex; gap:8px; margin:6px 0; }
+
+.num-box {
+  width:52px; height:54px;
+  background:#16213e;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:26px;
+  border:2px solid #ffffff11;
+}
+
+.num-box.filled { border-color:#6c63ff; }
+
+.numpad {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  width:100%;
+}
+
+.numpad-btn {
+  height:50px;
+  background:#16213e;
+  border-radius:10px;
+  color:#fff;
+  border:none;
+}
+
+.numpad-btn.confirm {
+  grid-column:span 3;
+  background:#6c63ff;
+}
+
+.turn-bar {
+  font-size:12px;
+  color:#888;
+}
+.turn-bar.my-turn { color:#6c63ff; font-weight:bold; }
+
+#confetti-canvas {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+}
 </style>
 </head>
+
 <body>
+
 <canvas id="confetti-canvas"></canvas>
 
-<div class="screen active" id="screen-invite">
+<!-- ================= LOBBY ================= -->
+<div class="screen active" id="screen-lobby">
   <h1>🎮 Raqamlarni Top</h1>
-  <p class="sub">Do'stingizni taklif qiling va 4 xonali sonini toping!</p>
-  <button class="btn" onclick="inviteFriend()">📨 Do'stni taklif qilish</button>
-  <div class="divider">— yoki xona kodini kiriting —</div>
-  <input class="code-input" id="room-input" placeholder="AB12CD34" maxlength="8">
-  <button class="btn" onclick="joinRoom()">🚪 Xonaga kirish</button>
+  <p class="sub">Xona yarating yoki mavjud xonaga qo‘shiling</p>
+
+  <button class="btn" onclick="createRoom()">➕ Xona yaratish</button>
+
+  <input class="input" id="join-code" placeholder="Xona kodi">
+
+  <button class="btn" onclick="joinRoom()">🚪 Qo‘shilish</button>
+
+  <h3 style="margin-top:10px;font-size:14px">📋 Aktiv xonalar</h3>
+  <div class="room-list" id="room-list"></div>
 </div>
 
+<!-- ================= WAIT ================= -->
 <div class="screen" id="screen-wait">
-  <h1>⏳ Raqibni kuting</h1>
-  <p class="sub">Do'stingiz ulanishini kutmoqdasiz</p>
-  <div class="anim-box">
-    <div class="digit-slot" id="d1">?</div>
-    <div class="digit-slot" id="d2">?</div>
-    <div class="digit-slot" id="d3">?</div>
-    <div class="digit-slot" id="d4">?</div>
-  </div>
-  <p class="sub">Xona kodi: <strong id="room-code-display" style="color:#6c63ff;font-size:20px;letter-spacing:3px"></strong></p>
+  <h1>⏳ Kutish</h1>
+  <p class="sub">Xona: <span id="room-code"></span></p>
 </div>
 
+<!-- ================= CHOOSE ================= -->
 <div class="screen" id="screen-choose">
-  <h1>🔢 Maxfiy sonni kiriting</h1>
-  <p class="sub">Raqibingiz shu sonni topishga harakat qiladi</p>
+  <h1>🔢 Maxfiy son</h1>
+
   <div class="number-display">
     <div class="num-box" id="nb0">_</div>
     <div class="num-box" id="nb1">_</div>
     <div class="num-box" id="nb2">_</div>
     <div class="num-box" id="nb3">_</div>
   </div>
+
   <div class="numpad">
-    <button class="numpad-btn" onclick="numPress('1')">1</button>
-    <button class="numpad-btn" onclick="numPress('2')">2</button>
-    <button class="numpad-btn" onclick="numPress('3')">3</button>
-    <button class="numpad-btn" onclick="numPress('4')">4</button>
-    <button class="numpad-btn" onclick="numPress('5')">5</button>
-    <button class="numpad-btn" onclick="numPress('6')">6</button>
-    <button class="numpad-btn" onclick="numPress('7')">7</button>
-    <button class="numpad-btn" onclick="numPress('8')">8</button>
-    <button class="numpad-btn" onclick="numPress('9')">9</button>
-    <button class="numpad-btn del" onclick="numDel()">⌫</button>
-    <button class="numpad-btn" onclick="numPress('0')">0</button>
-    <button class="numpad-btn confirm" id="confirm-btn" onclick="confirmNumber()">✅ Tasdiqlash</button>
+    <button class="numpad-btn" onclick="num('1')">1</button>
+    <button class="numpad-btn" onclick="num('2')">2</button>
+    <button class="numpad-btn" onclick="num('3')">3</button>
+    <button class="numpad-btn" onclick="num('4')">4</button>
+    <button class="numpad-btn" onclick="num('5')">5</button>
+    <button class="numpad-btn" onclick="num('6')">6</button>
+    <button class="numpad-btn" onclick="num('7')">7</button>
+    <button class="numpad-btn" onclick="num('8')">8</button>
+    <button class="numpad-btn" onclick="num('9')">9</button>
+    <button class="numpad-btn" onclick="del()">⌫</button>
+    <button class="numpad-btn" onclick="num('0')">0</button>
+    <button class="numpad-btn confirm" onclick="confirm()">Tasdiqlash</button>
   </div>
 </div>
 
+<!-- ================= GAME ================= -->
 <div class="screen" id="screen-game">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:4px">
-    <span style="font-size:15px;font-weight:bold">🕵️ Raqamni top!</span>
-    <span id="turn-text" class="turn-bar">...</span>
-  </div>
-  <div class="chat-box" id="chat-box"></div>
+  <span id="turn" class="turn-bar">...</span>
+
+  <div class="chat-box" id="chat"></div>
+
   <div class="number-display">
-    <div class="num-box" id="gb0">_</div>
-    <div class="num-box" id="gb1">_</div>
-    <div class="num-box" id="gb2">_</div>
-    <div class="num-box" id="gb3">_</div>
+    <div class="num-box" id="g0">_</div>
+    <div class="num-box" id="g1">_</div>
+    <div class="num-box" id="g2">_</div>
+    <div class="num-box" id="g3">_</div>
   </div>
+
   <div class="numpad">
-    <button class="numpad-btn" onclick="guessPress('1')">1</button>
-    <button class="numpad-btn" onclick="guessPress('2')">2</button>
-    <button class="numpad-btn" onclick="guessPress('3')">3</button>
-    <button class="numpad-btn" onclick="guessPress('4')">4</button>
-    <button class="numpad-btn" onclick="guessPress('5')">5</button>
-    <button class="numpad-btn" onclick="guessPress('6')">6</button>
-    <button class="numpad-btn" onclick="guessPress('7')">7</button>
-    <button class="numpad-btn" onclick="guessPress('8')">8</button>
-    <button class="numpad-btn" onclick="guessPress('9')">9</button>
-    <button class="numpad-btn del" onclick="guessDel()">⌫</button>
-    <button class="numpad-btn" onclick="guessPress('0')">0</button>
-    <button class="numpad-btn confirm" onclick="sendGuess()">🔍 Taxmin qilish</button>
+    <button class="numpad-btn" onclick="g('1')">1</button>
+    <button class="numpad-btn" onclick="g('2')">2</button>
+    <button class="numpad-btn" onclick="g('3')">3</button>
+    <button class="numpad-btn" onclick="g('4')">4</button>
+    <button class="numpad-btn" onclick="g('5')">5</button>
+    <button class="numpad-btn" onclick="g('6')">6</button>
+    <button class="numpad-btn" onclick="g('7')">7</button>
+    <button class="numpad-btn" onclick="g('8')">8</button>
+    <button class="numpad-btn" onclick="g('9')">9</button>
+    <button class="numpad-btn" onclick="gdel()">⌫</button>
+    <button class="numpad-btn" onclick="g('0')">0</button>
+    <button class="numpad-btn confirm" onclick="send()">Yuborish</button>
   </div>
 </div>
 
@@ -195,181 +238,119 @@ const WS_URL = location.hostname === 'localhost'
 
 const tg = window.Telegram.WebApp;
 tg.expand();
-tg.disableVerticalSwipes?.();
 
-let ws, roomId, playerIndex, myNumber;
-let guessBuffer = [], chooseBuffer = [];
-let myTurn = false;
-const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
-const startParam = tg.initDataUnsafe?.start_param;
+let ws, roomId, playerIndex;
+let choose=[], guess=[];
+let myTurn=false;
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+const username = tg.initDataUnsafe?.user?.first_name || "Player";
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function connect(onOpen) {
-  if (ws) ws.close();
+function connect(cb){
   ws = new WebSocket(WS_URL);
-  ws.onopen = onOpen;
-  ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
-  ws.onerror = () => alert('Server bilan ulanishda xatolik!');
+  ws.onopen = cb;
+  ws.onmessage = e => handle(JSON.parse(e.data));
 }
 
-function inviteFriend() {
-  connect(() => ws.send(JSON.stringify({ type: 'create_room', username })));
+function createRoom(){
+  connect(()=>ws.send(JSON.stringify({type:'create_room', username})));
 }
 
-function joinRoom() {
-  const code = document.getElementById('room-input').value.trim().toUpperCase();
-  if (code.length < 4) return alert('Xona kodini kiriting!');
-  connect(() => ws.send(JSON.stringify({ type: 'join_room', roomId: code, username })));
+function joinRoom(){
+  const code = document.getElementById('join-code').value.trim().toUpperCase();
+  connect(()=>ws.send(JSON.stringify({type:'join_room', roomId:code, username})));
 }
 
-function handleMessage(data) {
-  if (data.type === 'room_created') {
-    roomId = data.roomId;
-    playerIndex = 0;
-    document.getElementById('room-code-display').textContent = roomId;
-    showScreen('screen-wait');
-    startDigitAnim();
-    const shareUrl = `https://t.me/raqamlarniTOPbot?startapp=${roomId}`;
-    tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent('Men bilan Raqamlarni Top o\'ynaylik! 🎮')}`);
-  }
-  if (data.type === 'room_joined') {
-    roomId = data.roomId;
-    playerIndex = data.playerIndex;
-    showScreen('screen-choose');
-  }
-  if (data.type === 'error') alert(data.msg);
-  if (data.type === 'opponent_joined') showScreen('screen-choose');
-  if (data.type === 'game_start') {
-    myTurn = data.yourTurn;
-    showScreen('screen-game');
-    updateTurnText();
-  }
-  if (data.type === 'guess_result') {
-    addChatMessage(data);
-    myTurn = data.yourTurn;
-    updateTurnText();
-    if (data.won) data.guesserIdx === playerIndex ? showWin() : showLose();
-    guessBuffer = [];
-    updateGuessDisplay();
-  }
-  if (data.type === 'opponent_left') {
-    alert('Raqibingiz o\'yindan chiqdi!');
-    location.reload();
-  }
-}
+function handle(d){
 
-function startDigitAnim() {
-  ['d1','d2','d3','d4'].forEach(id => {
-    setInterval(() => {
-      document.getElementById(id).textContent = Math.floor(Math.random() * 10);
-    }, 150 + Math.random() * 250);
-  });
-}
-
-function numPress(n) { if (chooseBuffer.length < 4) { chooseBuffer.push(n); updateChooseDisplay(); } }
-function numDel() { chooseBuffer.pop(); updateChooseDisplay(); }
-function updateChooseDisplay() {
-  for (let i = 0; i < 4; i++) {
-    const b = document.getElementById('nb' + i);
-    b.textContent = chooseBuffer[i] || '_';
-    b.className = 'num-box' + (chooseBuffer[i] ? ' filled' : '');
-  }
-}
-function confirmNumber() {
-  if (chooseBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  myNumber = chooseBuffer.join('');
-  ws.send(JSON.stringify({ type: 'set_number', number: myNumber }));
-  const btn = document.getElementById('confirm-btn');
-  btn.textContent = '⏳ Raqib ham son kirityapti...';
-  btn.disabled = true;
-  btn.style.opacity = '0.6';
-}
-
-function guessPress(n) { if (myTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
-function guessDel() { guessBuffer.pop(); updateGuessDisplay(); }
-function updateGuessDisplay() {
-  for (let i = 0; i < 4; i++) {
-    const b = document.getElementById('gb' + i);
-    b.textContent = guessBuffer[i] || '_';
-    b.className = 'num-box' + (guessBuffer[i] ? ' filled' : '');
-  }
-}
-function sendGuess() {
-  if (!myTurn) return alert('Navbat sizniki emas!');
-  if (guessBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  ws.send(JSON.stringify({ type: 'guess', number: guessBuffer.join('') }));
-}
-
-function updateTurnText() {
-  const el = document.getElementById('turn-text');
-  el.textContent = myTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
-  el.className = 'turn-bar' + (myTurn ? ' my-turn' : '');
-}
-
-function addChatMessage(data) {
-  const chat = document.getElementById('chat-box');
-  const isMe = data.guesserIdx === playerIndex;
-  const div = document.createElement('div');
-  div.className = 'msg ' + (isMe ? 'me' : 'opponent');
-  const row = document.createElement('div');
-  row.className = 'result-row';
-  data.result.forEach((r, i) => {
-    const cell = document.createElement('div');
-    cell.className = 'result-cell' + (r !== '_' ? ' open' : '');
-    cell.textContent = r === '_' ? data.guess[i] : r;
-    row.appendChild(cell);
-  });
-  div.innerHTML = `<div style="font-size:10px;opacity:0.6;margin-bottom:3px">${isMe ? 'Siz' : 'Raqib'}: ${data.guess}</div>`;
-  div.appendChild(row);
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function showWin() {
-  const o = document.createElement('div');
-  o.className = 'result-overlay';
-  o.innerHTML = '<h2>🎉 G\'aldingiz!</h2><button class="btn" onclick="location.reload()" style="width:220px">Qayta o\'ynash</button>';
-  document.body.appendChild(o);
-  startConfetti();
-}
-function showLose() {
-  const o = document.createElement('div');
-  o.className = 'result-overlay';
-  o.innerHTML = '<h2>💔 Yutqizdingiz!</h2><button class="btn" onclick="location.reload()" style="width:220px">Qayta o\'ynash</button>';
-  document.body.appendChild(o);
-}
-
-function startConfetti() {
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  const pieces = Array.from({length: 100}, () => ({
-    x: Math.random() * canvas.width, y: -20,
-    r: Math.random() * 6 + 3,
-    color: `hsl(${Math.random()*360},90%,60%)`,
-    speed: Math.random() * 4 + 2, angle: Math.random() * 360
-  }));
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    pieces.forEach(p => {
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = p.color; ctx.fill();
-      p.y += p.speed; p.x += Math.sin(p.angle * Math.PI/180) * 1.5; p.angle += 3;
-      if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+  if(d.type==='rooms_list'){
+    const box=document.getElementById('room-list');
+    box.innerHTML='';
+    d.rooms.forEach(r=>{
+      const div=document.createElement('div');
+      div.className='room-item';
+      div.innerHTML=`<span>${r.id} (${r.count}/2)</span>`;
+      const btn=document.createElement('button');
+      btn.innerText='Join';
+      btn.onclick=()=>joinRoomById(r.id);
+      div.appendChild(btn);
+      box.appendChild(div);
     });
-    requestAnimationFrame(draw);
   }
-  draw();
+
+  if(d.type==='room_created'){
+    roomId=d.roomId;
+    playerIndex=0;
+    document.getElementById('room-code').innerText=roomId;
+    show('screen-wait');
+  }
+
+  if(d.type==='room_joined'){
+    roomId=d.roomId;
+    playerIndex=1;
+    show('screen-choose');
+  }
+
+  if(d.type==='game_start'){
+    myTurn=d.yourTurn;
+    show('screen-game');
+    updateTurn();
+  }
+
+  if(d.type==='guess_result'){
+    myTurn=d.yourTurn;
+    updateTurn();
+    addChat(d);
+  }
 }
 
-// Do'st havoladan kirsa — avtomatik join
-if (startParam) {
-  connect(() => ws.send(JSON.stringify({ type: 'join_room', roomId: startParam, username })));
+function joinRoomById(id){
+  connect(()=>ws.send(JSON.stringify({type:'join_room', roomId:id, username})));
+}
+
+/* choose number */
+function num(n){ if(choose.length<4){choose.push(n); render();}}
+function del(){choose.pop(); render();}
+function render(){
+  for(let i=0;i<4;i++){
+    const el=document.getElementById('nb'+i);
+    el.innerText=choose[i]||'_';
+  }
+}
+function confirm(){
+  ws.send(JSON.stringify({type:'set_number', number:choose.join('')}));
+}
+
+/* guess */
+function g(n){ if(myTurn && guess.length<4){guess.push(n); renderG();}}
+function gdel(){guess.pop(); renderG();}
+function renderG(){
+  for(let i=0;i<4;i++){
+    document.getElementById('g'+i).innerText=guess[i]||'_';
+  }
+}
+function send(){
+  ws.send(JSON.stringify({type:'guess', number:guess.join('')}));
+}
+
+/* UI */
+function updateTurn(){
+  document.getElementById('turn').innerText =
+    myTurn ? "Sizning navbat" : "Raqib navbati";
+}
+
+function addChat(d){
+  const c=document.getElementById('chat');
+  const div=document.createElement('div');
+  div.className='msg';
+  div.innerText=`Guess: ${d.guess}`;
+  c.appendChild(div);
 }
 </script>
+
 </body>
 </html>
