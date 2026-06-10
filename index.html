@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Raqamlarni Top</title>
+<title>O'yinlar</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -14,8 +14,7 @@
   }
   .screen {
     display: none; width: 100%; height: 100vh;
-    padding: 12px 16px; flex-direction: column;
-    align-items: center;
+    padding: 12px 16px; flex-direction: column; align-items: center;
   }
   .screen.active { display: flex; }
 
@@ -29,52 +28,50 @@
     width: 100%; margin: 4px 0; transition: transform 0.1s;
   }
   .btn:active { transform: scale(0.97); }
-  .btn.secondary {
-    background: #16213e;
-    border: 1px solid #6c63ff44;
-  }
+  .btn.secondary { background: #16213e; border: 1px solid #6c63ff44; }
+  .btn.green { background: linear-gradient(135deg, #11998e, #38ef7d); }
 
-  /* Lobby */
-  #screen-lobby { justify-content: flex-start; padding-top: 14px; }
+  /* ANA MENU */
+  #screen-menu { justify-content: center; gap: 16px; }
+  .game-card {
+    width: 100%; background: #16213e;
+    border: 1px solid #6c63ff33; border-radius: 16px;
+    padding: 20px; cursor: pointer; transition: border-color 0.2s;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .game-card:active { border-color: #6c63ff; }
+  .game-card-icon { font-size: 40px; }
+  .game-card-info h2 { font-size: 17px; margin-bottom: 4px; }
+  .game-card-info p { font-size: 12px; color: #888; }
+
+  /* LOBBY */
+  .lobby-screen { justify-content: flex-start; padding-top: 14px; }
   .lobby-header {
     width: 100%; display: flex;
-    justify-content: space-between; align-items: center;
-    margin-bottom: 10px;
+    justify-content: space-between; align-items: center; margin-bottom: 10px;
   }
   .room-list {
     width: 100%; flex: 1; overflow-y: auto;
-    display: flex; flex-direction: column; gap: 8px;
-    margin-bottom: 10px;
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
   }
   .room-card {
-    background: #16213e;
-    border: 1px solid #6c63ff33;
-    border-radius: 12px;
-    padding: 12px 16px;
+    background: #16213e; border: 1px solid #6c63ff33;
+    border-radius: 12px; padding: 12px 16px;
     display: flex; justify-content: space-between; align-items: center;
-    cursor: pointer; transition: border-color 0.2s;
   }
-  .room-card:active { border-color: #6c63ff; }
-  .room-card-info { display: flex; flex-direction: column; gap: 3px; }
   .room-card-name { font-size: 15px; font-weight: bold; }
-  .room-card-host { font-size: 11px; color: #888; }
+  .room-card-host { font-size: 11px; color: #888; margin-top: 3px; }
   .room-card-join {
-    background: #6c63ff; color: #fff;
-    border: none; border-radius: 8px;
-    padding: 7px 14px; font-size: 13px; cursor: pointer;
+    background: #6c63ff; color: #fff; border: none;
+    border-radius: 8px; padding: 7px 14px; font-size: 13px; cursor: pointer;
   }
-  .empty-rooms {
-    text-align: center; color: #444;
-    font-size: 13px; padding: 30px 0;
-  }
+  .empty-rooms { text-align: center; color: #444; font-size: 13px; padding: 30px 0; }
 
-  /* Modal */
+  /* MODAL */
   .modal-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: flex;
+    align-items: center; justify-content: center; z-index: 100;
   }
   .modal {
     background: #1a1a2e; border: 1px solid #6c63ff44;
@@ -82,22 +79,21 @@
     width: 90%; max-width: 320px;
     display: flex; flex-direction: column; gap: 10px;
   }
-  .modal h2 { font-size: 18px; text-align: center; margin-bottom: 4px; }
+  .modal h2 { font-size: 18px; text-align: center; }
   .modal-input {
-    padding: 12px; border-radius: 10px;
-    background: #16213e; color: #fff;
-    border: 1px solid #6c63ff44; width: 100%;
+    padding: 12px; border-radius: 10px; background: #16213e;
+    color: #fff; border: 1px solid #6c63ff44; width: 100%;
     font-size: 16px; text-align: center; outline: none;
   }
   .modal-input:focus { border-color: #6c63ff; }
 
-  /* Kutish */
-  #screen-wait { justify-content: center; }
+  /* KUTISH */
+  .wait-screen { justify-content: center; }
   .anim-box { display: flex; gap: 10px; margin: 16px 0; }
   .digit-slot {
-    width: 60px; height: 72px; background: #16213e;
+    width: 55px; height: 68px; background: #16213e;
     border-radius: 12px; display: flex; align-items: center;
-    justify-content: center; font-size: 34px; font-weight: bold;
+    justify-content: center; font-size: 30px; font-weight: bold;
     color: #6c63ff; border: 2px solid #6c63ff44;
     animation: flip 0.6s infinite alternate;
   }
@@ -109,8 +105,8 @@
     to { transform: scaleY(0.8); color: #ff6584; }
   }
 
-  /* Son tanlash */
-  #screen-choose { justify-content: center; }
+  /* RAQAMLARNI TOP */
+  #screen-num-choose, #screen-num-game { justify-content: flex-start; padding-top: 10px; }
   .number-display { display: flex; gap: 8px; margin: 8px 0; }
   .num-box {
     width: 52px; height: 54px; background: #16213e;
@@ -129,19 +125,15 @@
     font-size: 20px; cursor: pointer; transition: background 0.1s;
   }
   .numpad-btn:active { background: #6c63ff; }
-  .numpad-btn.del { background: #1e0a1e; color: #ff6584; font-size: 18px; }
+  .numpad-btn.del { background: #1e0a1e; color: #ff6584; }
   .numpad-btn.confirm {
     background: #6c63ff; grid-column: span 3;
     height: 44px; font-size: 14px; font-weight: bold;
   }
-
-  /* O'yin */
-  #screen-game { justify-content: flex-start; padding-top: 10px; }
   .chat-box {
-    width: 100%; flex: 1; min-height: 0;
-    background: #16213e; border-radius: 12px;
-    overflow-y: auto; padding: 10px; margin: 6px 0;
-    display: flex; flex-direction: column; gap: 6px;
+    width: 100%; flex: 1; min-height: 0; background: #16213e;
+    border-radius: 12px; overflow-y: auto; padding: 10px;
+    margin: 6px 0; display: flex; flex-direction: column; gap: 6px;
   }
   .msg { padding: 7px 11px; border-radius: 10px; max-width: 88%; font-size: 13px; }
   .msg.me { background: #6c63ff; align-self: flex-end; border-bottom-right-radius: 2px; }
@@ -153,10 +145,40 @@
     justify-content: center; font-size: 14px; font-weight: bold;
   }
   .result-cell.open { background: rgba(255,255,255,0.32); }
+
+  /* TOLMANAK */
+  #screen-fru-choose, #screen-fru-game { justify-content: flex-start; padding-top: 10px; }
+  .grid-label { font-size: 12px; color: #888; margin-bottom: 6px; align-self: flex-start; }
+  .grid-3x3 {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; width: 100%; max-width: 280px; margin-bottom: 10px;
+  }
+  .cell {
+    aspect-ratio: 1; border-radius: 12px; border: 2px solid #ffffff11;
+    background: #16213e; display: flex; align-items: center;
+    justify-content: center; font-size: 28px; cursor: pointer;
+    transition: all 0.15s; position: relative;
+  }
+  .cell.selected { border-color: #38ef7d; background: #0d2b1e; }
+  .cell.hit { background: #1a3a1a; border-color: #38ef7d; }
+  .cell.miss { background: #2a1a1a; border-color: #ff6584; }
+  .cell.revealed-fruit { background: #0d2b1e; border-color: #38ef7d; }
+  .cell.disabled { cursor: default; opacity: 0.7; }
+  .fru-boards {
+    width: 100%; display: flex; flex-direction: column;
+    align-items: center; flex: 1; gap: 8px;
+  }
+  .board-section { width: 100%; max-width: 280px; }
+  .board-title {
+    font-size: 12px; color: #888; margin-bottom: 6px;
+    display: flex; justify-content: space-between;
+  }
+
+  /* TURN */
   .turn-bar { font-size: 12px; color: #666; }
   .turn-bar.my-turn { color: #6c63ff; font-weight: bold; font-size: 13px; }
 
-  /* Natija */
+  /* NATIJA */
   #confetti-canvas {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%; pointer-events: none; z-index: 999;
@@ -167,38 +189,76 @@
     justify-content: center; z-index: 998; flex-direction: column; gap: 16px;
   }
   .result-overlay h2 { font-size: 36px; }
+
+  .back-btn {
+    position: absolute; top: 14px; left: 16px;
+    background: none; border: none; color: #6c63ff;
+    font-size: 14px; cursor: pointer; padding: 4px;
+  }
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
 
-<!-- LOBBY -->
-<div class="screen active" id="screen-lobby">
-  <div class="lobby-header">
-    <h1>🎮 Raqamlarni Top</h1>
-    <button class="btn secondary" style="width:auto;padding:8px 12px;font-size:13px" onclick="shareGame()">🔗 Ulash</button>
+<!-- ANA MENU -->
+<div class="screen active" id="screen-menu">
+  <h1 style="margin-bottom:20px">🎮 O'yinlar</h1>
+  <div class="game-card" onclick="openGame('num')">
+    <div class="game-card-icon">🔢</div>
+    <div class="game-card-info">
+      <h2>Raqamlarni Top</h2>
+      <p>4 xonali maxfiy sonni top</p>
+    </div>
   </div>
-  <p class="sub" style="width:100%;text-align:left;margin-bottom:8px">Ochiq xonalar:</p>
-  <div class="room-list" id="room-list">
-    <div class="empty-rooms" id="empty-rooms">Hozircha ochiq xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
+  <div class="game-card" onclick="openGame('fru')">
+    <div class="game-card-icon">🍎</div>
+    <div class="game-card-info">
+      <h2>TopOlmaNok</h2>
+      <p>3x3 taxtada mevalarni yashir va top</p>
+    </div>
   </div>
-  <button class="btn" onclick="showCreateModal()">➕ Xona yaratish</button>
+  <button class="btn secondary" style="margin-top:10px" onclick="shareApp()">🔗 Do'stga yuborish</button>
 </div>
 
-<!-- XONA YARATISH MODAL -->
+<!-- RAQAMLARNI TOP LOBBY -->
+<div class="screen lobby-screen" id="screen-num-lobby">
+  <button class="back-btn" onclick="showScreen('screen-menu')">← Orqaga</button>
+  <div class="lobby-header" style="margin-top:20px">
+    <h1>🔢 Raqamlarni Top</h1>
+  </div>
+  <p class="sub" style="width:100%;text-align:left">Ochiq xonalar:</p>
+  <div class="room-list" id="num-room-list">
+    <div class="empty-rooms" id="num-empty-rooms">Hozircha xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
+  </div>
+  <button class="btn" onclick="showNumCreateModal()">➕ Xona yaratish</button>
+</div>
+
+<!-- TOLMANAK LOBBY -->
+<div class="screen lobby-screen" id="screen-fru-lobby">
+  <button class="back-btn" onclick="showScreen('screen-menu')">← Orqaga</button>
+  <div class="lobby-header" style="margin-top:20px">
+    <h1>🍎 TopOlmaNok</h1>
+  </div>
+  <p class="sub" style="width:100%;text-align:left">Ochiq xonalar:</p>
+  <div class="room-list" id="fru-room-list">
+    <div class="empty-rooms" id="fru-empty-rooms">Hozircha xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
+  </div>
+  <button class="btn green" onclick="showFruCreateModal()">➕ Xona yaratish</button>
+</div>
+
+<!-- MODAL (ikkala o'yin uchun) -->
 <div class="modal-overlay" id="create-modal" style="display:none">
   <div class="modal">
-    <h2>🏠 Yangi xona</h2>
-    <p class="sub">Xonaga nom bering</p>
-    <input class="modal-input" id="room-name-input" placeholder="Masalan: Sherzod" maxlength="20">
-    <button class="btn" onclick="createRoom()">✅ Xona yaratish</button>
-    <button class="btn secondary" onclick="hideCreateModal()">Bekor qilish</button>
+    <h2 id="modal-title">🏠 Yangi xona</h2>
+    <input class="modal-input" id="room-name-input" placeholder="Xona nomi" maxlength="20">
+    <button class="btn" id="modal-confirm-btn">✅ Yaratish</button>
+    <button class="btn secondary" onclick="hideModal()">Bekor qilish</button>
   </div>
 </div>
 
-<!-- KUTISH -->
-<div class="screen" id="screen-wait">
-  <h1>⏳ Raqibni kuting</h1>
+<!-- KUTISH (ikkala o'yin uchun) -->
+<div class="screen wait-screen" id="screen-wait">
+  <h1 id="wait-title">⏳ Raqibni kuting</h1>
   <p class="sub">Xonangiz ochiq — kimdir kirishini kuting</p>
   <div class="anim-box">
     <div class="digit-slot" id="d1">?</div>
@@ -206,13 +266,13 @@
     <div class="digit-slot" id="d3">?</div>
     <div class="digit-slot" id="d4">?</div>
   </div>
-  <p class="sub">Xona: <strong id="room-name-display" style="color:#6c63ff"></strong></p>
-  <button class="btn secondary" style="width:200px;margin-top:10px" onclick="leaveRoom()">❌ Xonadan chiqish</button>
+  <p class="sub">Xona: <strong id="wait-room-name" style="color:#6c63ff"></strong></p>
+  <button class="btn secondary" style="width:200px;margin-top:10px" onclick="leaveRoom()">❌ Chiqish</button>
 </div>
 
-<!-- SON TANLASH -->
-<div class="screen" id="screen-choose">
-  <h1>🔢 Maxfiy son</h1>
+<!-- RAQAMLARNI TOP: SON TANLASH -->
+<div class="screen" id="screen-num-choose">
+  <h1 style="margin-top:10px">🔢 Maxfiy son</h1>
   <p class="sub">Raqibingiz shu sonni topishga harakat qiladi</p>
   <div class="number-display">
     <div class="num-box" id="nb0">_</div>
@@ -232,15 +292,15 @@
     <button class="numpad-btn" onclick="numPress('9')">9</button>
     <button class="numpad-btn del" onclick="numDel()">⌫</button>
     <button class="numpad-btn" onclick="numPress('0')">0</button>
-    <button class="numpad-btn confirm" id="confirm-btn" onclick="confirmNumber()">✅ Tasdiqlash</button>
+    <button class="numpad-btn confirm" id="num-confirm-btn" onclick="confirmNumber()">✅ Tasdiqlash</button>
   </div>
 </div>
 
-<!-- O'YIN -->
-<div class="screen" id="screen-game">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:4px">
+<!-- RAQAMLARNI TOP: O'YIN -->
+<div class="screen" id="screen-num-game">
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:4px;margin-top:6px">
     <span style="font-size:15px;font-weight:bold">🕵️ Raqamni top!</span>
-    <span id="turn-text" class="turn-bar">...</span>
+    <span id="num-turn-text" class="turn-bar">...</span>
   </div>
   <div class="chat-box" id="chat-box"></div>
   <div class="number-display">
@@ -261,7 +321,39 @@
     <button class="numpad-btn" onclick="guessPress('9')">9</button>
     <button class="numpad-btn del" onclick="guessDel()">⌫</button>
     <button class="numpad-btn" onclick="guessPress('0')">0</button>
-    <button class="numpad-btn confirm" onclick="sendGuess()">🔍 Taxmin qilish</button>
+    <button class="numpad-btn confirm" onclick="sendGuess()">🔍 Taxmin</button>
+  </div>
+</div>
+
+<!-- TOLMANAK: YASHIRISH -->
+<div class="screen" id="screen-fru-choose">
+  <h1 style="margin-top:10px">🍐 Mevalarni yashiring</h1>
+  <p class="sub">3 ta katakchani tanlang — u yerga <strong>nok</strong> yashiriladi</p>
+  <div class="grid-3x3" id="fru-choose-grid"></div>
+  <button class="btn green" id="fru-confirm-btn" onclick="confirmFruHidden()" style="max-width:280px">✅ Tasdiqlash (0/3)</button>
+</div>
+
+<!-- TOLMANAK: O'YIN -->
+<div class="screen" id="screen-fru-game">
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin:6px 0 8px">
+    <span style="font-size:15px;font-weight:bold">🍎 TopOlmaNok</span>
+    <span id="fru-turn-text" class="turn-bar">...</span>
+  </div>
+  <div class="fru-boards">
+    <div class="board-section">
+      <div class="board-title">
+        <span>🎯 Raqib taxtasi (siz ochasiz)</span>
+        <span id="fru-opp-score">0/3</span>
+      </div>
+      <div class="grid-3x3" id="fru-attack-grid"></div>
+    </div>
+    <div class="board-section">
+      <div class="board-title">
+        <span>🛡️ Sizning taxtangiz</span>
+        <span id="fru-my-score">0/3</span>
+      </div>
+      <div class="grid-3x3" id="fru-defend-grid"></div>
+    </div>
   </div>
 </div>
 
@@ -274,9 +366,16 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.disableVerticalSwipes?.();
 
-let ws, roomId, playerIndex;
+let ws;
+let currentGame = null; // 'num' | 'fru'
+let roomId, playerIndex;
+let numMyTurn = false, fruMyTurn = false;
 let guessBuffer = [], chooseBuffer = [];
-let myTurn = false;
+let fruSelected = []; // yashirish uchun tanlangan katakchalar
+let fruAttackState = []; // raqib taxtasida ochilganlar {cell, hit}
+let fruDefendState = []; // mening taxtamda ochilganlar {cell}
+let myHidden = []; // mening yashirgan katakchalarim
+
 const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
 
 function showScreen(id) {
@@ -284,119 +383,167 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
-// WebSocket ulanish
+function openGame(game) {
+  currentGame = game;
+  showScreen(game === 'num' ? 'screen-num-lobby' : 'screen-fru-lobby');
+}
+
 function connectWS() {
   ws = new WebSocket(WS_URL);
   ws.onopen = () => console.log('WS ulandi');
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
   ws.onerror = () => alert('Server bilan ulanishda xatolik!');
-  ws.onclose = () => {
-    setTimeout(connectWS, 2000); // avtomatik qayta ulanish
-  };
+  ws.onclose = () => setTimeout(connectWS, 2000);
 }
 connectWS();
 
 function handleMessage(data) {
-  if (data.type === 'room_list') {
-    updateRoomList(data.rooms);
+  // Xonalar ro'yxati
+  if (data.type === 'num_room_list') updateRoomList('num', data.rooms);
+  if (data.type === 'fru_room_list') updateRoomList('fru', data.rooms);
+
+  // RAQAMLARNI TOP
+  if (data.type === 'num_room_created') {
+    roomId = data.roomId; playerIndex = 0;
+    document.getElementById('wait-title').textContent = '⏳ Raqibni kuting';
+    document.getElementById('wait-room-name').textContent = document.getElementById('room-name-input').value || username;
+    showScreen('screen-wait'); startDigitAnim();
   }
-  if (data.type === 'room_created') {
-    roomId = data.roomId;
-    playerIndex = 0;
-    document.getElementById('room-name-display').textContent =
-      document.getElementById('room-name-input').value || username;
-    showScreen('screen-wait');
-    startDigitAnim();
+  if (data.type === 'num_room_joined') { roomId = data.roomId; playerIndex = data.playerIndex; }
+  if (data.type === 'num_opponent_joined') showScreen('screen-num-choose');
+  if (data.type === 'num_number_set') {
+    const btn = document.getElementById('num-confirm-btn');
+    btn.textContent = '⏳ Raqib ham son kirityapti...';
+    btn.disabled = true; btn.style.opacity = '0.6';
   }
-  if (data.type === 'room_joined') {
-    roomId = data.roomId;
-    playerIndex = data.playerIndex;
+  if (data.type === 'num_game_start') {
+    numMyTurn = data.yourTurn;
+    showScreen('screen-num-game'); updateNumTurn();
   }
-  if (data.type === 'opponent_joined') {
-    showScreen('screen-choose');
-  }
-  if (data.type === 'error') {
-    alert(data.msg);
-  }
-  if (data.type === 'game_start') {
-    myTurn = data.yourTurn;
-    showScreen('screen-game');
-    updateTurnText();
-  }
-  if (data.type === 'guess_result') {
-    addChatMessage(data);
-    myTurn = data.yourTurn;
-    updateTurnText();
+  if (data.type === 'num_guess_result') {
+    addChatMessage(data); numMyTurn = data.yourTurn; updateNumTurn();
     if (data.won) data.guesserIdx === playerIndex ? showWin() : showLose();
-    guessBuffer = [];
-    updateGuessDisplay();
+    guessBuffer = []; updateGuessDisplay();
   }
+
+  // TOLMANAK
+  if (data.type === 'fru_room_created') {
+    roomId = data.roomId; playerIndex = 0;
+    document.getElementById('wait-title').textContent = '⏳ Raqibni kuting';
+    document.getElementById('wait-room-name').textContent = document.getElementById('room-name-input').value || username;
+    showScreen('screen-wait'); startDigitAnim();
+  }
+  if (data.type === 'fru_room_joined') { roomId = data.roomId; playerIndex = data.playerIndex; }
+  if (data.type === 'fru_opponent_joined') {
+    fruSelected = []; myHidden = [];
+    buildFruChooseGrid();
+    showScreen('screen-fru-choose');
+  }
+  if (data.type === 'fru_hidden_set') {
+    const btn = document.getElementById('fru-confirm-btn');
+    btn.textContent = '⏳ Raqib ham yashiryapti...';
+    btn.disabled = true; btn.style.opacity = '0.6';
+  }
+  if (data.type === 'fru_game_start') {
+    fruMyTurn = data.yourTurn;
+    fruAttackState = []; fruDefendState = [];
+    buildFruGameGrids();
+    showScreen('screen-fru-game'); updateFruTurn();
+  }
+  if (data.type === 'fru_cell_result') {
+    fruMyTurn = data.yourTurn;
+    fruAttackState.push({ cell: data.cell, hit: data.hit, byMe: data.attackerIdx === playerIndex });
+    if (data.attackerIdx !== playerIndex) fruDefendState.push(data.cell);
+    updateFruGrids(data);
+    updateFruTurn();
+    updateFruScores(data);
+    if (data.won) data.attackerIdx === playerIndex ? showWin() : showLose();
+  }
+
   if (data.type === 'opponent_left') {
     alert('Raqibingiz o\'yindan chiqdi!');
-    roomId = null; playerIndex = null;
-    showScreen('screen-lobby');
+    backToLobby();
   }
+  if (data.type === 'error') alert(data.msg);
 }
 
-function updateRoomList(rooms) {
-  const list = document.getElementById('room-list');
-  const empty = document.getElementById('empty-rooms');
-  // Eski kartochkalarni o'chirish
-  list.querySelectorAll('.room-card').forEach(c => c.remove());
-  if (rooms.length === 0) {
-    empty.style.display = 'block';
-  } else {
-    empty.style.display = 'none';
-    rooms.forEach(room => {
-      const card = document.createElement('div');
-      card.className = 'room-card';
-      card.innerHTML = `
-        <div class="room-card-info">
-          <div class="room-card-name">🏠 ${room.name}</div>
-          <div class="room-card-host">${room.host} kutmoqda</div>
-        </div>
-        <button class="room-card-join" onclick="joinRoom('${room.id}')">Kirish</button>
-      `;
-      list.appendChild(card);
-    });
-  }
+function updateRoomList(game, rooms) {
+  const listEl = document.getElementById(`${game}-room-list`);
+  const emptyEl = document.getElementById(`${game}-empty-rooms`);
+  listEl.querySelectorAll('.room-card').forEach(c => c.remove());
+  emptyEl.style.display = rooms.length === 0 ? 'block' : 'none';
+  rooms.forEach(room => {
+    const card = document.createElement('div');
+    card.className = 'room-card';
+    card.innerHTML = `
+      <div>
+        <div class="room-card-name">${game === 'num' ? '🏠' : '🍎'} ${room.name}</div>
+        <div class="room-card-host">${room.host} kutmoqda</div>
+      </div>
+      <button class="room-card-join" onclick="joinRoom('${game}','${room.id}')">Kirish</button>
+    `;
+    listEl.appendChild(card);
+  });
 }
 
-// Xona yaratish modal
-function showCreateModal() {
-  document.getElementById('create-modal').style.display = 'flex';
+// Modal
+let modalGame = null;
+function showNumCreateModal() {
+  modalGame = 'num';
+  document.getElementById('modal-title').textContent = '🔢 Yangi xona';
+  document.getElementById('modal-confirm-btn').textContent = '✅ Yaratish';
+  document.getElementById('modal-confirm-btn').onclick = createRoom;
   document.getElementById('room-name-input').value = username;
-  document.getElementById('room-name-input').focus();
+  document.getElementById('create-modal').style.display = 'flex';
 }
-function hideCreateModal() {
-  document.getElementById('create-modal').style.display = 'none';
+function showFruCreateModal() {
+  modalGame = 'fru';
+  document.getElementById('modal-title').textContent = '🍎 Yangi xona';
+  document.getElementById('modal-confirm-btn').textContent = '✅ Yaratish';
+  document.getElementById('modal-confirm-btn').onclick = createRoom;
+  document.getElementById('room-name-input').value = username;
+  document.getElementById('create-modal').style.display = 'flex';
 }
+function hideModal() { document.getElementById('create-modal').style.display = 'none'; }
 
 function createRoom() {
   const name = document.getElementById('room-name-input').value.trim() || username;
-  hideCreateModal();
-  ws.send(JSON.stringify({ type: 'create_room', username, name }));
+  hideModal();
+  if (modalGame === 'num') ws.send(JSON.stringify({ type: 'num_create_room', username, name }));
+  else ws.send(JSON.stringify({ type: 'fru_create_room', username, name }));
 }
 
-function joinRoom(id) {
-  ws.send(JSON.stringify({ type: 'join_room', roomId: id, username }));
-  showScreen('screen-choose');
+function joinRoom(game, id) {
+  currentGame = game;
+  if (game === 'num') {
+    ws.send(JSON.stringify({ type: 'num_join_room', roomId: id, username }));
+    chooseBuffer = [];
+    showScreen('screen-num-choose');
+  } else {
+    ws.send(JSON.stringify({ type: 'fru_join_room', roomId: id, username }));
+  }
 }
 
 function leaveRoom() {
   if (ws) ws.close();
   roomId = null;
-  chooseBuffer = [];
-  showScreen('screen-lobby');
-  connectWS();
+  setTimeout(() => { connectWS(); backToLobby(); }, 300);
 }
 
-// O'yin havolasini ulashish
-function shareGame() {
+function backToLobby() {
+  document.querySelectorAll('.result-overlay').forEach(o => o.remove());
+  roomId = null; playerIndex = null;
+  chooseBuffer = []; guessBuffer = [];
+  fruSelected = []; fruAttackState = []; fruDefendState = [];
+  // num-confirm-btn reset
+  const nb = document.getElementById('num-confirm-btn');
+  nb.textContent = '✅ Tasdiqlash'; nb.disabled = false; nb.style.opacity = '1';
+  showScreen(currentGame === 'num' ? 'screen-num-lobby' : 'screen-fru-lobby');
+}
+
+function shareApp() {
   const url = 'https://t.me/raqamlarniTOPbot';
-  tg.openTelegramLink(
-    `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Raqamlarni Top o\'ynaylik! 🎮 Shu botga kir va menga qo\'shil!')}`
-  );
+  tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('O\'yinlar o\'ynaylik! 🎮')}`);
 }
 
 // Digit animatsiya
@@ -408,7 +555,7 @@ function startDigitAnim() {
   });
 }
 
-// Son tanlash
+// ===== RAQAMLARNI TOP =====
 function numPress(n) { if (chooseBuffer.length < 4) { chooseBuffer.push(n); updateChooseDisplay(); } }
 function numDel() { chooseBuffer.pop(); updateChooseDisplay(); }
 function updateChooseDisplay() {
@@ -420,15 +567,9 @@ function updateChooseDisplay() {
 }
 function confirmNumber() {
   if (chooseBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  ws.send(JSON.stringify({ type: 'set_number', number: chooseBuffer.join('') }));
-  const btn = document.getElementById('confirm-btn');
-  btn.textContent = '⏳ Raqib ham son kirityapti...';
-  btn.disabled = true;
-  btn.style.opacity = '0.6';
+  ws.send(JSON.stringify({ type: 'num_set_number', number: chooseBuffer.join('') }));
 }
-
-// Taxmin
-function guessPress(n) { if (myTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
+function guessPress(n) { if (numMyTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
 function guessDel() { guessBuffer.pop(); updateGuessDisplay(); }
 function updateGuessDisplay() {
   for (let i = 0; i < 4; i++) {
@@ -438,17 +579,15 @@ function updateGuessDisplay() {
   }
 }
 function sendGuess() {
-  if (!myTurn) return alert('Navbat sizniki emas!');
+  if (!numMyTurn) return alert('Navbat sizniki emas!');
   if (guessBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  ws.send(JSON.stringify({ type: 'guess', number: guessBuffer.join('') }));
+  ws.send(JSON.stringify({ type: 'num_guess', number: guessBuffer.join('') }));
 }
-
-function updateTurnText() {
-  const el = document.getElementById('turn-text');
-  el.textContent = myTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
-  el.className = 'turn-bar' + (myTurn ? ' my-turn' : '');
+function updateNumTurn() {
+  const el = document.getElementById('num-turn-text');
+  el.textContent = numMyTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
+  el.className = 'turn-bar' + (numMyTurn ? ' my-turn' : '');
 }
-
 function addChatMessage(data) {
   const chat = document.getElementById('chat-box');
   const isMe = data.guesserIdx === playerIndex;
@@ -468,10 +607,117 @@ function addChatMessage(data) {
   chat.scrollTop = chat.scrollHeight;
 }
 
+// ===== TOLMANAK =====
+function buildFruChooseGrid() {
+  const grid = document.getElementById('fru-choose-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.textContent = '❓';
+    cell.onclick = () => toggleFruCell(i, cell);
+    grid.appendChild(cell);
+  }
+}
+
+function toggleFruCell(idx, el) {
+  if (fruSelected.includes(idx)) {
+    fruSelected = fruSelected.filter(i => i !== idx);
+    el.classList.remove('selected');
+    el.textContent = '❓';
+  } else {
+    if (fruSelected.length >= 3) return;
+    fruSelected.push(idx);
+    el.classList.add('selected');
+    el.textContent = '🍐';
+  }
+  const btn = document.getElementById('fru-confirm-btn');
+  btn.textContent = `✅ Tasdiqlash (${fruSelected.length}/3)`;
+}
+
+function confirmFruHidden() {
+  if (fruSelected.length < 3) return alert('3 ta katakcha tanlang!');
+  myHidden = [...fruSelected];
+  ws.send(JSON.stringify({ type: 'fru_set_hidden', cells: myHidden }));
+}
+
+function buildFruGameGrids() {
+  // Hujum taxtasi (raqibnikini ochamiz)
+  const attackGrid = document.getElementById('fru-attack-grid');
+  attackGrid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.id = `atk-${i}`;
+    cell.textContent = '❓';
+    cell.onclick = () => openCell(i);
+    attackGrid.appendChild(cell);
+  }
+  // Mudofaa taxtasi (mening katakchalarim)
+  const defendGrid = document.getElementById('fru-defend-grid');
+  defendGrid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell disabled';
+    cell.id = `def-${i}`;
+    cell.textContent = myHidden.includes(i) ? '🍐' : '';
+    defendGrid.appendChild(cell);
+  }
+}
+
+function openCell(idx) {
+  if (!fruMyTurn) return;
+  const cell = document.getElementById(`atk-${idx}`);
+  if (cell.classList.contains('hit') || cell.classList.contains('miss')) return;
+  ws.send(JSON.stringify({ type: 'fru_open_cell', cell: idx }));
+}
+
+function updateFruGrids(data) {
+  if (data.attackerIdx === playerIndex) {
+    // Men hujum qildim — attack gridni yangilayman
+    const cell = document.getElementById(`atk-${data.cell}`);
+    if (cell) {
+      cell.classList.add(data.hit ? 'hit' : 'miss');
+      cell.textContent = data.hit ? '🍎' : '❌';
+    }
+  } else {
+    // Raqib hujum qildi — defend gridni yangilayman
+    const cell = document.getElementById(`def-${data.cell}`);
+    if (cell) {
+      if (data.hit) {
+        cell.textContent = '💥';
+        cell.style.opacity = '0.5';
+      } else {
+        cell.style.border = '2px solid #ff658455';
+      }
+    }
+  }
+}
+
+function updateFruScores(data) {
+  const myHits = fruAttackState.filter(s => s.hit && s.byMe).length;
+  const oppHits = fruAttackState.filter(s => s.hit && !s.byMe).length;
+  document.getElementById('fru-opp-score').textContent = `${myHits}/3`;
+  document.getElementById('fru-my-score').textContent = `${oppHits}/3 ochildi`;
+}
+
+function updateFruTurn() {
+  const el = document.getElementById('fru-turn-text');
+  el.textContent = fruMyTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
+  el.className = 'turn-bar' + (fruMyTurn ? ' my-turn' : '');
+  // Hujum katakchalarini faollashtirish/o'chirish
+  document.querySelectorAll('#fru-attack-grid .cell').forEach(c => {
+    if (!c.classList.contains('hit') && !c.classList.contains('miss')) {
+      c.style.opacity = fruMyTurn ? '1' : '0.5';
+    }
+  });
+}
+
+// ===== G'ALABA / YUTQIZISH =====
 function showWin() {
   const o = document.createElement('div');
   o.className = 'result-overlay';
-  o.innerHTML = '<h2>🎉 Siz yutdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
+  o.innerHTML = '<h2>🎉 G\'aldingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
   document.body.appendChild(o);
   startConfetti();
 }
@@ -480,12 +726,6 @@ function showLose() {
   o.className = 'result-overlay';
   o.innerHTML = '<h2>💔 Yutqizdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
   document.body.appendChild(o);
-}
-function backToLobby() {
-  document.querySelectorAll('.result-overlay').forEach(o => o.remove());
-  roomId = null; playerIndex = null;
-  chooseBuffer = []; guessBuffer = [];
-  showScreen('screen-lobby');
 }
 
 function startConfetti() {
