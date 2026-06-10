@@ -29,19 +29,6 @@ function sendTo(ws, data) {
   }
 }
 
-// 🔥 hammaga room list yuborish
-function broadcastRooms() {
-  const list = Object.keys(rooms).map(id => ({
-    id,
-    players: rooms[id].usernames,
-    count: rooms[id].players.length
-  }));
-
-  wss.clients.forEach(client => {
-    sendTo(client, { type: 'rooms_list', rooms: list });
-  });
-}
-
 function generateRoomId() {
   return Math.random().toString(36).substr(2, 8).toUpperCase();
 }
@@ -56,29 +43,13 @@ function checkGuess(secret, guess) {
   return result;
 }
 
-function removeRoom(roomId) {
-  if (!rooms[roomId]) return;
-
-  rooms[roomId].players.forEach(p => {
-    playerRoom.delete(p);
-  });
-
-  delete rooms[roomId];
-  broadcastRooms();
-}
-
 wss.on('connection', (ws) => {
-
-  broadcastRooms();
-
   ws.on('message', (message) => {
     let data;
     try { data = JSON.parse(message); } catch { return; }
 
-    // ================= CREATE ROOM =================
     if (data.type === 'create_room') {
       const roomId = generateRoomId();
-
       rooms[roomId] = {
         players: [ws],
         usernames: [data.username],
@@ -86,19 +57,10 @@ wss.on('connection', (ws) => {
         guesses: [],
         currentTurn: 0
       };
-
       playerRoom.set(ws, roomId);
-
-      sendTo(ws, {
-        type: 'room_created',
-        roomId,
-        playerIndex: 0
-      });
-
-      broadcastRooms();
+      sendTo(ws, { type: 'room_created', roomId, playerIndex: 0 });
     }
 
-    // ================= JOIN ROOM =================
     else if (data.type === 'join_room') {
       const room = rooms[data.roomId];
       if (!room) return sendTo(ws, { type: 'error', msg: 'Xona topilmadi' });
@@ -108,31 +70,15 @@ wss.on('connection', (ws) => {
       room.usernames.push(data.username);
       playerRoom.set(ws, data.roomId);
 
-      sendTo(ws, {
-        type: 'room_joined',
-        roomId: data.roomId,
-        playerIndex: 1
-      });
-
-      sendTo(room.players[0], {
-        type: 'opponent_joined',
-        opponentName: data.username
-      });
-
-      sendTo(ws, {
-        type: 'opponent_joined',
-        opponentName: room.usernames[0]
-      });
-
-      broadcastRooms();
+      sendTo(ws, { type: 'room_joined', roomId: data.roomId, playerIndex: 1 });
+      sendTo(room.players[0], { type: 'opponent_joined', opponentName: data.username });
+      sendTo(ws, { type: 'opponent_joined', opponentName: room.usernames[0] });
     }
 
-    // ================= SET NUMBER =================
     else if (data.type === 'set_number') {
       const roomId = playerRoom.get(ws);
       const room = rooms[roomId];
       if (!room) return;
-
       const idx = room.players.indexOf(ws);
       room.numbers[idx] = data.number;
 
@@ -144,7 +90,6 @@ wss.on('connection', (ws) => {
       }
     }
 
-    // ================= GUESS =================
     else if (data.type === 'guess') {
       const roomId = playerRoom.get(ws);
       const room = rooms[roomId];
@@ -152,9 +97,15 @@ wss.on('connection', (ws) => {
 
       const attackerIdx = room.players.indexOf(ws);
       const defenderIdx = 1 - attackerIdx;
-
       const secret = room.numbers[defenderIdx];
       const result = checkGuess(secret.split(''), data.number.split(''));
+
+      const guessEntry = {
+        player: attackerIdx,
+        guess: data.number,
+        result
+      };
+      room.guesses.push(guessEntry);
 
       const won = result.join('') === secret;
 
@@ -170,34 +121,25 @@ wss.on('connection', (ws) => {
       });
 
       if (won) {
-        removeRoom(roomId);
+        delete rooms[roomId];
+        room.players.forEach(p => playerRoom.delete(p));
+      } else {
+        room.currentTurn = defenderIdx;
       }
     }
   });
 
-  // ================= DISCONNECT =================
   ws.on('close', () => {
     const roomId = playerRoom.get(ws);
-    if (!roomId) return;
-
-    const room = rooms[roomId];
-    if (!room) return;
-
-    const isOwner = room.players[0] === ws;
-
-    room.players.forEach(p => {
-      if (p !== ws) sendTo(p, { type: 'opponent_left' });
-      playerRoom.delete(p);
-    });
-
-    // 🔥 owner chiqsa xona yo‘qoladi
-    removeRoom(roomId);
-
-    if (isOwner) {
+    if (roomId && rooms[roomId]) {
+      const room = rooms[roomId];
+      room.players.forEach(p => {
+        if (p !== ws) sendTo(p, { type: 'opponent_left' });
+        playerRoom.delete(p);
+      });
       delete rooms[roomId];
     }
-
-    broadcastRooms();
+    playerRoom.delete(ws);
   });
 });
 
