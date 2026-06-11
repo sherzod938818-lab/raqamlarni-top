@@ -1,3 +1,6 @@
+Zo'r! Endi `index.html` — GitHub da oching → Edit → **hammасини o'chirib** quyidagini joylashtiring:
+
+```html
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -7,24 +10,12 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #1a1a2e; color: #fff;
-    width: 100%; height: 100%; overflow: hidden;
-  }
-  .screen {
-    display: none; width: 100%; height: 100vh;
-    padding: 12px 16px; flex-direction: column; align-items: center;
-  }
+  html, body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #fff; width: 100%; height: 100%; overflow: hidden; }
+  .screen { display: none; width: 100%; height: 100vh; padding: 12px 16px; flex-direction: column; align-items: center; }
   .screen.active { display: flex; }
   h1 { font-size: 20px; margin-bottom: 4px; text-align: center; }
   .sub { color: #aaa; text-align: center; margin-bottom: 10px; font-size: 12px; }
-  .btn {
-    background: linear-gradient(135deg, #6c63ff, #3f3d9e);
-    color: #fff; border: none; padding: 13px;
-    border-radius: 12px; font-size: 15px; cursor: pointer;
-    width: 100%; margin: 4px 0; transition: transform 0.1s;
-  }
+  .btn { background: linear-gradient(135deg, #6c63ff, #3f3d9e); color: #fff; border: none; padding: 13px; border-radius: 12px; font-size: 15px; cursor: pointer; width: 100%; margin: 4px 0; transition: transform 0.1s; }
   .btn:active { transform: scale(0.97); }
   .btn.secondary { background: #16213e; border: 1px solid #6c63ff44; }
   .btn.green { background: linear-gradient(135deg, #11998e, #38ef7d); color: #000; }
@@ -32,37 +23,30 @@
 
   /* ANA MENU */
   #screen-menu { justify-content: center; gap: 12px; }
-  .game-card {
-    width: 100%; background: #16213e;
-    border: 1px solid #6c63ff33; border-radius: 16px;
-    padding: 18px; cursor: pointer; transition: border-color 0.2s;
-    display: flex; align-items: center; gap: 16px;
-  }
+  .game-card { width: 100%; background: #16213e; border: 1px solid #6c63ff33; border-radius: 16px; padding: 18px; cursor: pointer; transition: border-color 0.2s; display: flex; align-items: center; gap: 16px; }
   .game-card:active { border-color: #6c63ff; }
   .game-card-icon { font-size: 36px; }
   .game-card-info h2 { font-size: 16px; margin-bottom: 3px; }
   .game-card-info p { font-size: 11px; color: #888; }
 
+  /* STATISTIKA */
+  .stats-bar { width: 100%; display: flex; justify-content: space-around; background: #16213e; border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 20px; font-weight: bold; color: #6c63ff; }
+  .stat-label { font-size: 10px; color: #666; }
+  .streak-bar { width: 100%; text-align: center; font-size: 13px; color: #f39c12; margin-bottom: 8px; }
+
   /* LOBBY */
   .lobby-screen { justify-content: flex-start; padding-top: 14px; }
-  .lobby-header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .room-list { width: 100%; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-  .room-card {
-    background: #16213e; border: 1px solid #6c63ff33;
-    border-radius: 12px; padding: 12px 16px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .room-card { background: #16213e; border: 1px solid #6c63ff33; border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
   .room-card-name { font-size: 15px; font-weight: bold; }
   .room-card-host { font-size: 11px; color: #888; margin-top: 3px; }
   .room-card-join { background: #6c63ff; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 13px; cursor: pointer; }
   .empty-rooms { text-align: center; color: #444; font-size: 13px; padding: 30px 0; }
 
   /* MODAL */
-  .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); display: flex;
-    align-items: center; justify-content: center; z-index: 100;
-  }
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; }
   .modal { background: #1a1a2e; border: 1px solid #6c63ff44; border-radius: 16px; padding: 24px 20px; width: 90%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
   .modal h2 { font-size: 18px; text-align: center; }
   .modal-input { padding: 12px; border-radius: 10px; background: #0d0d1a; color: #fff; border: 1px solid #6c63ff44; width: 100%; font-size: 16px; text-align: center; outline: none; }
@@ -70,35 +54,62 @@
 
   /* KUTISH */
   .wait-screen { justify-content: center; }
-  .anim-box { display: flex; gap: 10px; margin: 16px 0; }
-  .digit-slot {
-    width: 55px; height: 68px; background: #16213e; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px; font-weight: bold; color: #6c63ff; border: 2px solid #6c63ff44;
-    animation: flip 0.6s infinite alternate;
-  }
+  .wait-anim { display: flex; gap: 10px; margin: 16px 0; min-height: 80px; align-items: center; justify-content: center; }
+
+  /* Raqamlarni top animatsiya */
+  .digit-slot { width: 55px; height: 68px; background: #16213e; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: #6c63ff; border: 2px solid #6c63ff44; animation: flip 0.6s infinite alternate; }
   .digit-slot:nth-child(2) { animation-delay: 0.15s; }
   .digit-slot:nth-child(3) { animation-delay: 0.3s; }
   .digit-slot:nth-child(4) { animation-delay: 0.45s; }
-  @keyframes flip {
-    from { transform: scaleY(1); color: #6c63ff; }
-    to { transform: scaleY(0.8); color: #ff6584; }
-  }
+  @keyframes flip { from { transform: scaleY(1); color: #6c63ff; } to { transform: scaleY(0.8); color: #ff6584; } }
+
+  /* Meva animatsiya */
+  .fruit-slot { font-size: 40px; animation: fruitBounce 0.8s infinite alternate; }
+  .fruit-slot:nth-child(2) { animation-delay: 0.2s; }
+  .fruit-slot:nth-child(3) { animation-delay: 0.4s; }
+  .fruit-slot:nth-child(4) { animation-delay: 0.6s; }
+  @keyframes fruitBounce { from { transform: translateY(0) rotate(-10deg); } to { transform: translateY(-16px) rotate(10deg); } }
+
+  /* Mina animatsiya */
+  .mine-slot { font-size: 36px; animation: minePulse 0.7s infinite alternate; }
+  .mine-slot:nth-child(2) { animation-delay: 0.18s; }
+  .mine-slot:nth-child(3) { animation-delay: 0.36s; }
+  .mine-slot:nth-child(4) { animation-delay: 0.54s; }
+  @keyframes minePulse { from { transform: scale(1); } to { transform: scale(1.3); } }
+
+  /* NEON CHEGARA */
+  .neon-board { border-radius: 14px; transition: box-shadow 0.3s, border-color 0.3s; border: 2px solid transparent; }
+  .neon-board.my-turn { border-color: #39ff14; box-shadow: 0 0 10px #39ff14, 0 0 20px #39ff1466; }
+
+  /* TAYMER */
+  .timer-bar { width: 100%; max-width: 300px; height: 6px; background: #16213e; border-radius: 3px; margin: 4px 0; overflow: hidden; }
+  .timer-fill { height: 100%; background: #6c63ff; border-radius: 3px; transition: width 1s linear, background 0.3s; }
+  .timer-text { font-size: 13px; font-weight: bold; color: #6c63ff; }
+  .timer-text.urgent { color: #e74c3c; animation: blink 0.5s infinite; }
+  @keyframes blink { from { opacity: 1; } to { opacity: 0.4; } }
+
+  /* RAQIB ISMI */
+  .opponent-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; background: #16213e; border-radius: 10px; padding: 7px 12px; margin-bottom: 6px; font-size: 13px; }
+  .opponent-name { color: #ff6584; font-weight: bold; }
+  .my-name { color: #6c63ff; font-weight: bold; }
+
+  /* EMOJI REAKSIYALAR */
+  .reaction-bar { display: flex; gap: 8px; margin: 4px 0; }
+  .reaction-btn { background: #16213e; border: 1px solid #ffffff11; border-radius: 10px; padding: 6px 10px; font-size: 20px; cursor: pointer; transition: transform 0.1s; }
+  .reaction-btn:active { transform: scale(1.3); }
+  .reaction-popup { position: fixed; font-size: 48px; pointer-events: none; z-index: 500; animation: popupAnim 1.5s forwards; }
+  @keyframes popupAnim { 0% { transform: scale(0.5) translateY(0); opacity: 1; } 100% { transform: scale(1.5) translateY(-100px); opacity: 0; } }
 
   /* RAQAMLARNI TOP */
   .number-display { display: flex; gap: 8px; margin: 8px 0; }
-  .num-box {
-    width: 52px; height: 54px; background: #16213e; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; font-weight: bold; color: #555; border: 2px solid #ffffff11; transition: all 0.15s;
-  }
+  .num-box { width: 52px; height: 54px; background: #16213e; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; color: #555; border: 2px solid #ffffff11; transition: all 0.15s; }
   .num-box.filled { border-color: #6c63ff; color: #fff; }
-  .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: 100%; max-width: 280px; margin-top: 8px; }
-  .numpad-btn { background: #16213e; color: #fff; border: 1px solid #ffffff08; padding: 0; height: 50px; border-radius: 10px; font-size: 20px; cursor: pointer; transition: background 0.1s; }
+  .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: 100%; max-width: 280px; margin-top: 6px; }
+  .numpad-btn { background: #16213e; color: #fff; border: 1px solid #ffffff08; padding: 0; height: 48px; border-radius: 10px; font-size: 20px; cursor: pointer; transition: background 0.1s; }
   .numpad-btn:active { background: #6c63ff; }
   .numpad-btn.del { background: #1e0a1e; color: #ff6584; }
-  .numpad-btn.confirm { background: #6c63ff; grid-column: span 3; height: 44px; font-size: 14px; font-weight: bold; }
-  .chat-box { width: 100%; flex: 1; min-height: 0; background: #16213e; border-radius: 12px; overflow-y: auto; padding: 10px; margin: 6px 0; display: flex; flex-direction: column; gap: 6px; }
+  .numpad-btn.confirm { background: #6c63ff; grid-column: span 3; height: 42px; font-size: 14px; font-weight: bold; }
+  .chat-box { width: 100%; flex: 1; min-height: 0; background: #16213e; border-radius: 12px; overflow-y: auto; padding: 10px; margin: 4px 0; display: flex; flex-direction: column; gap: 5px; }
   .msg { padding: 7px 11px; border-radius: 10px; max-width: 88%; font-size: 13px; }
   .msg.me { background: #6c63ff; align-self: flex-end; border-bottom-right-radius: 2px; }
   .msg.opponent { background: #0f3460; align-self: flex-start; border-bottom-left-radius: 2px; }
@@ -106,52 +117,34 @@
   .result-cell { width: 28px; height: 30px; background: rgba(255,255,255,0.12); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
   .result-cell.open { background: rgba(255,255,255,0.32); }
 
-  /* GRID (TopOlmaNok va Minalar) */
-  .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 280px; margin-bottom: 10px; }
-  .grid-4x4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; max-width: 300px; }
-  .cell {
-    aspect-ratio: 1; border-radius: 10px; border: 2px solid #ffffff11;
-    background: #16213e; display: flex; align-items: center;
-    justify-content: center; font-size: 24px; cursor: pointer; transition: all 0.15s;
-  }
-  .cell:active { transform: scale(0.93); }
+  /* GRID */
+  .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 270px; margin-bottom: 8px; }
+  .grid-4x4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; max-width: 296px; }
+  .cell { aspect-ratio: 1; border-radius: 10px; border: 2px solid #ffffff11; background: #16213e; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: all 0.15s; }
+  .cell:active { transform: scale(0.9); }
   .cell.selected { border-color: #38ef7d; background: #0d2b1e; }
   .cell.hit { background: #1a3a1a; border-color: #38ef7d; cursor: default; }
   .cell.miss { background: #1a1a2e; border-color: #ffffff22; cursor: default; }
   .cell.mine-found { background: #3a0a0a; border-color: #e74c3c; cursor: default; }
   .cell.safe { background: #0d2020; border-color: #38ef7d44; cursor: default; }
   .cell.disabled { cursor: default; }
-  .cell.dim { opacity: 0.5; }
 
-  /* MINALAR o'yin */
-  .min-boards { width: 100%; display: flex; flex-direction: column; align-items: center; flex: 1; gap: 10px; overflow-y: auto; }
-  .board-section { width: 100%; max-width: 300px; }
-  .board-title { font-size: 12px; color: #888; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-  .mine-counter { display: flex; gap: 4px; }
-  .mine-dot { width: 14px; height: 14px; border-radius: 50%; background: #e74c3c; border: 2px solid #c0392b; }
-  .mine-dot.found { background: #333; border-color: #555; }
-
-  /* TOLMANAK */
+  /* MINALAR */
+  .min-boards { width: 100%; display: flex; flex-direction: column; align-items: center; flex: 1; gap: 8px; overflow-y: auto; }
   .fru-boards { width: 100%; display: flex; flex-direction: column; align-items: center; flex: 1; gap: 8px; }
-
-  /* TURN */
-  .turn-bar { font-size: 12px; color: #666; }
-  .turn-bar.my-turn { color: #6c63ff; font-weight: bold; font-size: 13px; }
+  .board-section { width: 100%; max-width: 296px; }
+  .board-title { font-size: 12px; color: #888; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+  .mine-counter { display: flex; gap: 4px; }
+  .mine-dot { width: 12px; height: 12px; border-radius: 50%; background: #e74c3c; }
+  .mine-dot.found { background: #333; }
 
   /* NATIJA */
   #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
-  .result-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.88); display: flex; align-items: center;
-    justify-content: center; z-index: 998; flex-direction: column; gap: 16px;
-  }
+  .result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); display: flex; align-items: center; justify-content: center; z-index: 998; flex-direction: column; gap: 14px; }
   .result-overlay h2 { font-size: 34px; text-align: center; }
 
   .back-btn { position: absolute; top: 14px; left: 16px; background: none; border: none; color: #6c63ff; font-size: 14px; cursor: pointer; padding: 4px; }
-
-  #screen-num-choose, #screen-num-game,
-  #screen-fru-choose, #screen-fru-game,
-  #screen-min-choose, #screen-min-game { justify-content: flex-start; padding-top: 10px; }
+  #screen-num-choose, #screen-num-game, #screen-fru-choose, #screen-fru-game, #screen-min-choose, #screen-min-game { justify-content: flex-start; padding-top: 8px; }
 </style>
 </head>
 <body>
@@ -159,63 +152,48 @@
 
 <!-- ANA MENU -->
 <div class="screen active" id="screen-menu">
-  <h1 style="margin-bottom:16px">🎮 O'yinlar</h1>
+  <h1 style="margin-bottom:10px">🎮 O'yinlar</h1>
+  <div class="stats-bar" id="main-stats">
+    <div class="stat-item"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Jami</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-win" style="color:#38ef7d">0</div><div class="stat-label">Yutgan</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-lose" style="color:#e74c3c">0</div><div class="stat-label">Yutqizgan</div></div>
+  </div>
+  <div class="streak-bar" id="streak-bar"></div>
   <div class="game-card" onclick="openGame('num')">
     <div class="game-card-icon">🔢</div>
-    <div class="game-card-info">
-      <h2>Raqamlarni Top</h2>
-      <p>4 xonali maxfiy sonni top</p>
-    </div>
+    <div class="game-card-info"><h2>Raqamlarni Top</h2><p>4 xonali maxfiy sonni top</p></div>
   </div>
   <div class="game-card" onclick="openGame('fru')">
     <div class="game-card-icon">🍎</div>
-    <div class="game-card-info">
-      <h2>TopOlmaNok</h2>
-      <p>3x3 taxtada mevalarni yashir va top</p>
-    </div>
+    <div class="game-card-info"><h2>TopOlmaNok</h2><p>3x3 taxtada mevalarni yashir va top</p></div>
   </div>
   <div class="game-card" onclick="openGame('min')">
     <div class="game-card-icon">💣</div>
-    <div class="game-card-info">
-      <h2>Minalar</h2>
-      <p>4x4 taxtada minalardan qoch!</p>
-    </div>
+    <div class="game-card-info"><h2>Minalar</h2><p>4x4 taxtada minalardan qoch!</p></div>
   </div>
   <button class="btn secondary" style="margin-top:8px" onclick="shareApp()">🔗 Do'stga yuborish</button>
 </div>
 
-<!-- RAQAMLARNI TOP LOBBY -->
+<!-- LOBBIES -->
 <div class="screen lobby-screen" id="screen-num-lobby">
   <button class="back-btn" onclick="showScreen('screen-menu')">← Orqaga</button>
-  <div style="margin-top:24px;width:100%">
-    <h1>🔢 Raqamlarni Top</h1>
-  </div>
-  <p class="sub" style="width:100%;text-align:left;margin-top:8px">Ochiq xonalar:</p>
-  <div class="room-list" id="num-room-list">
-    <div class="empty-rooms" id="num-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
-  </div>
+  <div style="margin-top:24px;width:100%"><h1>🔢 Raqamlarni Top</h1></div>
+  <p class="sub" style="width:100%;text-align:left;margin-top:6px">Ochiq xonalar:</p>
+  <div class="room-list" id="num-room-list"><div class="empty-rooms" id="num-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div></div>
   <button class="btn" onclick="showCreateModal('num')">➕ Xona yaratish</button>
 </div>
-
-<!-- TOLMANAK LOBBY -->
 <div class="screen lobby-screen" id="screen-fru-lobby">
   <button class="back-btn" onclick="showScreen('screen-menu')">← Orqaga</button>
   <div style="margin-top:24px;width:100%"><h1>🍎 TopOlmaNok</h1></div>
-  <p class="sub" style="width:100%;text-align:left;margin-top:8px">Ochiq xonalar:</p>
-  <div class="room-list" id="fru-room-list">
-    <div class="empty-rooms" id="fru-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
-  </div>
+  <p class="sub" style="width:100%;text-align:left;margin-top:6px">Ochiq xonalar:</p>
+  <div class="room-list" id="fru-room-list"><div class="empty-rooms" id="fru-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div></div>
   <button class="btn green" onclick="showCreateModal('fru')">➕ Xona yaratish</button>
 </div>
-
-<!-- MINALAR LOBBY -->
 <div class="screen lobby-screen" id="screen-min-lobby">
   <button class="back-btn" onclick="showScreen('screen-menu')">← Orqaga</button>
   <div style="margin-top:24px;width:100%"><h1>💣 Minalar</h1></div>
-  <p class="sub" style="width:100%;text-align:left;margin-top:8px">Ochiq xonalar:</p>
-  <div class="room-list" id="min-room-list">
-    <div class="empty-rooms" id="min-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div>
-  </div>
+  <p class="sub" style="width:100%;text-align:left;margin-top:6px">Ochiq xonalar:</p>
+  <div class="room-list" id="min-room-list"><div class="empty-rooms" id="min-empty-rooms">Xona yo'q 🙁<br><small>Birinchi bo'lib xona oching!</small></div></div>
   <button class="btn red" onclick="showCreateModal('min')">➕ Xona yaratish</button>
 </div>
 
@@ -233,98 +211,85 @@
 <div class="screen wait-screen" id="screen-wait">
   <h1 id="wait-title">⏳ Raqibni kuting</h1>
   <p class="sub">Xonangiz ochiq — kimdir kirishini kuting</p>
-  <div class="anim-box">
-    <div class="digit-slot" id="d1">?</div>
-    <div class="digit-slot" id="d2">?</div>
-    <div class="digit-slot" id="d3">?</div>
-    <div class="digit-slot" id="d4">?</div>
-  </div>
+  <div class="wait-anim" id="wait-anim"></div>
   <p class="sub">Xona: <strong id="wait-room-name" style="color:#6c63ff"></strong></p>
   <button class="btn secondary" style="width:200px;margin-top:10px" onclick="leaveRoom()">❌ Chiqish</button>
 </div>
 
 <!-- RAQAMLARNI TOP: SON TANLASH -->
 <div class="screen" id="screen-num-choose">
-  <h1 style="margin-top:8px">🔢 Maxfiy son</h1>
+  <h1 style="margin-top:6px">🔢 Maxfiy son</h1>
   <p class="sub">Raqibingiz shu sonni topishga harakat qiladi</p>
   <div class="number-display">
-    <div class="num-box" id="nb0">_</div>
-    <div class="num-box" id="nb1">_</div>
-    <div class="num-box" id="nb2">_</div>
-    <div class="num-box" id="nb3">_</div>
+    <div class="num-box" id="nb0">_</div><div class="num-box" id="nb1">_</div>
+    <div class="num-box" id="nb2">_</div><div class="num-box" id="nb3">_</div>
   </div>
   <div class="numpad">
-    <button class="numpad-btn" onclick="numPress('1')">1</button>
-    <button class="numpad-btn" onclick="numPress('2')">2</button>
-    <button class="numpad-btn" onclick="numPress('3')">3</button>
-    <button class="numpad-btn" onclick="numPress('4')">4</button>
-    <button class="numpad-btn" onclick="numPress('5')">5</button>
-    <button class="numpad-btn" onclick="numPress('6')">6</button>
-    <button class="numpad-btn" onclick="numPress('7')">7</button>
-    <button class="numpad-btn" onclick="numPress('8')">8</button>
-    <button class="numpad-btn" onclick="numPress('9')">9</button>
-    <button class="numpad-btn del" onclick="numDel()">⌫</button>
-    <button class="numpad-btn" onclick="numPress('0')">0</button>
+    <button class="numpad-btn" onclick="numPress('1')">1</button><button class="numpad-btn" onclick="numPress('2')">2</button><button class="numpad-btn" onclick="numPress('3')">3</button>
+    <button class="numpad-btn" onclick="numPress('4')">4</button><button class="numpad-btn" onclick="numPress('5')">5</button><button class="numpad-btn" onclick="numPress('6')">6</button>
+    <button class="numpad-btn" onclick="numPress('7')">7</button><button class="numpad-btn" onclick="numPress('8')">8</button><button class="numpad-btn" onclick="numPress('9')">9</button>
+    <button class="numpad-btn del" onclick="numDel()">⌫</button><button class="numpad-btn" onclick="numPress('0')">0</button>
     <button class="numpad-btn confirm" id="num-confirm-btn" onclick="confirmNumber()">✅ Tasdiqlash</button>
   </div>
 </div>
 
 <!-- RAQAMLARNI TOP: O'YIN -->
 <div class="screen" id="screen-num-game">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin:6px 0 4px">
-    <span style="font-size:15px;font-weight:bold">🕵️ Raqamni top!</span>
-    <span id="num-turn-text" class="turn-bar">...</span>
+  <div class="opponent-bar"><span class="my-name" id="num-my-name">Sen</span><span id="num-opp-name" class="opponent-name"></span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
+    <span id="num-turn-text" class="timer-text">...</span>
+    <span id="num-timer-text" class="timer-text">30</span>
   </div>
-  <div class="chat-box" id="chat-box"></div>
-  <div class="number-display">
-    <div class="num-box" id="gb0">_</div>
-    <div class="num-box" id="gb1">_</div>
-    <div class="num-box" id="gb2">_</div>
-    <div class="num-box" id="gb3">_</div>
+  <div class="timer-bar"><div class="timer-fill" id="num-timer-fill" style="width:100%"></div></div>
+  <div class="chat-box neon-board" id="chat-box" style="margin-top:4px"></div>
+  <div class="reaction-bar">
+    <button class="reaction-btn" onclick="sendReaction('num','👍')">👍</button>
+    <button class="reaction-btn" onclick="sendReaction('num','😂')">😂</button>
+    <button class="reaction-btn" onclick="sendReaction('num','🔥')">🔥</button>
+    <button class="reaction-btn" onclick="sendReaction('num','😱')">😱</button>
+  </div>
+  <div class="number-display" style="margin:4px 0">
+    <div class="num-box" id="gb0">_</div><div class="num-box" id="gb1">_</div>
+    <div class="num-box" id="gb2">_</div><div class="num-box" id="gb3">_</div>
   </div>
   <div class="numpad">
-    <button class="numpad-btn" onclick="guessPress('1')">1</button>
-    <button class="numpad-btn" onclick="guessPress('2')">2</button>
-    <button class="numpad-btn" onclick="guessPress('3')">3</button>
-    <button class="numpad-btn" onclick="guessPress('4')">4</button>
-    <button class="numpad-btn" onclick="guessPress('5')">5</button>
-    <button class="numpad-btn" onclick="guessPress('6')">6</button>
-    <button class="numpad-btn" onclick="guessPress('7')">7</button>
-    <button class="numpad-btn" onclick="guessPress('8')">8</button>
-    <button class="numpad-btn" onclick="guessPress('9')">9</button>
-    <button class="numpad-btn del" onclick="guessDel()">⌫</button>
-    <button class="numpad-btn" onclick="guessPress('0')">0</button>
+    <button class="numpad-btn" onclick="guessPress('1')">1</button><button class="numpad-btn" onclick="guessPress('2')">2</button><button class="numpad-btn" onclick="guessPress('3')">3</button>
+    <button class="numpad-btn" onclick="guessPress('4')">4</button><button class="numpad-btn" onclick="guessPress('5')">5</button><button class="numpad-btn" onclick="guessPress('6')">6</button>
+    <button class="numpad-btn" onclick="guessPress('7')">7</button><button class="numpad-btn" onclick="guessPress('8')">8</button><button class="numpad-btn" onclick="guessPress('9')">9</button>
+    <button class="numpad-btn del" onclick="guessDel()">⌫</button><button class="numpad-btn" onclick="guessPress('0')">0</button>
     <button class="numpad-btn confirm" onclick="sendGuess()">🔍 Taxmin</button>
   </div>
 </div>
 
 <!-- TOLMANAK: YASHIRISH -->
 <div class="screen" id="screen-fru-choose">
-  <h1 style="margin-top:8px">🍐 Mevalarni yashiring</h1>
-  <p class="sub">3 ta katakcha tanlang — nok yashiriladi</p>
+  <h1 style="margin-top:6px">🍐 Mevalarni yashiring</h1>
+  <p class="sub">3 ta katakcha tanlang</p>
   <div class="grid-3x3" id="fru-choose-grid"></div>
-  <button class="btn green" id="fru-confirm-btn" onclick="confirmFruHidden()" style="max-width:280px">✅ Tasdiqlash (0/3)</button>
+  <button class="btn green" id="fru-confirm-btn" onclick="confirmFruHidden()" style="max-width:270px">✅ Tasdiqlash (0/3)</button>
 </div>
 
 <!-- TOLMANAK: O'YIN -->
 <div class="screen" id="screen-fru-game">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin:6px 0 8px">
-    <span style="font-size:15px;font-weight:bold">🍎 TopOlmaNok</span>
-    <span id="fru-turn-text" class="turn-bar">...</span>
+  <div class="opponent-bar"><span class="my-name" id="fru-my-name">Sen</span><span id="fru-opp-name" class="opponent-name"></span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
+    <span id="fru-turn-text" class="timer-text">...</span>
+    <span id="fru-timer-text" class="timer-text">30</span>
+  </div>
+  <div class="timer-bar"><div class="timer-fill" id="fru-timer-fill" style="width:100%"></div></div>
+  <div class="reaction-bar">
+    <button class="reaction-btn" onclick="sendReaction('fru','👍')">👍</button>
+    <button class="reaction-btn" onclick="sendReaction('fru','😂')">😂</button>
+    <button class="reaction-btn" onclick="sendReaction('fru','🔥')">🔥</button>
+    <button class="reaction-btn" onclick="sendReaction('fru','😱')">😱</button>
   </div>
   <div class="fru-boards">
     <div class="board-section">
-      <div class="board-title">
-        <span>🎯 Raqib taxtasi</span>
-        <span id="fru-opp-score">0/3</span>
-      </div>
-      <div class="grid-3x3" id="fru-attack-grid"></div>
+      <div class="board-title"><span>🎯 Raqib taxtasi</span><span id="fru-opp-score">0/3</span></div>
+      <div class="grid-3x3 neon-board" id="fru-attack-grid"></div>
     </div>
     <div class="board-section">
-      <div class="board-title">
-        <span>🛡️ Sizning taxtangiz</span>
-        <span id="fru-my-score">0/3 ochildi</span>
-      </div>
+      <div class="board-title"><span>🛡️ Sizning taxtangiz</span><span id="fru-my-score">0/3</span></div>
       <div class="grid-3x3" id="fru-defend-grid"></div>
     </div>
   </div>
@@ -332,97 +297,231 @@
 
 <!-- MINALAR: YASHIRISH -->
 <div class="screen" id="screen-min-choose">
-  <h1 style="margin-top:8px">💣 Minalarni yashiring</h1>
-  <p class="sub">4 ta katakcha tanlang — mina yashiriladi</p>
+  <h1 style="margin-top:6px">💣 Minalarni yashiring</h1>
+  <p class="sub">4 ta katakcha tanlang</p>
   <div class="grid-4x4" id="min-choose-grid"></div>
-  <button class="btn red" id="min-confirm-btn" onclick="confirmMinHidden()" style="max-width:300px;margin-top:8px">✅ Tasdiqlash (0/4)</button>
+  <button class="btn red" id="min-confirm-btn" onclick="confirmMinHidden()" style="max-width:296px;margin-top:8px">✅ Tasdiqlash (0/4)</button>
 </div>
 
 <!-- MINALAR: O'YIN -->
 <div class="screen" id="screen-min-game">
-  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin:6px 0 6px">
-    <span style="font-size:15px;font-weight:bold">💣 Minalar</span>
-    <span id="min-turn-text" class="turn-bar">...</span>
+  <div class="opponent-bar"><span class="my-name" id="min-my-name">Sen</span><span id="min-opp-name" class="opponent-name"></span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
+    <span id="min-turn-text" class="timer-text">...</span>
+    <span id="min-timer-text" class="timer-text">30</span>
+  </div>
+  <div class="timer-bar"><div class="timer-fill" id="min-timer-fill" style="width:100%"></div></div>
+  <div class="reaction-bar">
+    <button class="reaction-btn" onclick="sendReaction('min','👍')">👍</button>
+    <button class="reaction-btn" onclick="sendReaction('min','😂')">😂</button>
+    <button class="reaction-btn" onclick="sendReaction('min','🔥')">🔥</button>
+    <button class="reaction-btn" onclick="sendReaction('min','😱')">😱</button>
   </div>
   <div class="min-boards">
     <div class="board-section">
-      <div class="board-title">
-        <span>🎯 Raqib taxtasi (siz ochasiz)</span>
-        <div class="mine-counter" id="min-atk-counter"></div>
-      </div>
-      <div class="grid-4x4" id="min-attack-grid"></div>
+      <div class="board-title"><span>🎯 Raqib taxtasi</span><div class="mine-counter" id="min-atk-counter"></div></div>
+      <div class="grid-4x4 neon-board" id="min-attack-grid"></div>
     </div>
-    <div class="board-section" style="margin-top:10px">
-      <div class="board-title">
-        <span>🛡️ Sizning taxtangiz</span>
-        <div class="mine-counter" id="min-def-counter"></div>
-      </div>
+    <div class="board-section" style="margin-top:8px">
+      <div class="board-title"><span>🛡️ Sizning taxtangiz</span><div class="mine-counter" id="min-def-counter"></div></div>
       <div class="grid-4x4" id="min-defend-grid"></div>
     </div>
   </div>
 </div>
 
 <script>
-const WS_URL = location.hostname === 'localhost'
-  ? 'ws://localhost:3000'
-  : 'wss://raqamlarni-top.onrender.com';
-
+const WS_URL = location.hostname === 'localhost' ? 'ws://localhost:3000' : 'wss://raqamlarni-top.onrender.com';
 const tg = window.Telegram.WebApp;
 tg.expand();
 tg.disableVerticalSwipes?.();
 
-let ws;
-let currentGame = null;
-let roomId, playerIndex;
+// ===== STATISTIKA =====
+const stats = JSON.parse(localStorage.getItem('gameStats') || '{"total":0,"win":0,"lose":0,"streak":0,"bestStreak":0}');
+function saveStats() { localStorage.setItem('gameStats', JSON.stringify(stats)); }
+function updateStatsUI() {
+  document.getElementById('stat-total').textContent = stats.total;
+  document.getElementById('stat-win').textContent = stats.win;
+  document.getElementById('stat-lose').textContent = stats.lose;
+  const sb = document.getElementById('streak-bar');
+  if (stats.streak > 1) sb.textContent = `🔥 ${stats.streak} ta ketma-ket g'alaba!`;
+  else if (stats.bestStreak > 1) sb.textContent = `⭐ Eng yaxshi: ${stats.bestStreak} ta ketma-ket`;
+  else sb.textContent = '';
+}
+updateStatsUI();
+
+// ===== AUDIO =====
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(freq, duration, type = 'sine', vol = 0.3) {
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
+  } catch(e) {}
+}
+function playClick() { playSound(600, 0.06, 'square', 0.2); }
+function playHit() { playSound(880, 0.15, 'sine', 0.3); playSound(1100, 0.1, 'sine', 0.2); }
+function playMiss() { playSound(200, 0.2, 'sawtooth', 0.15); }
+function playMine() { playSound(150, 0.4, 'sawtooth', 0.4); playSound(80, 0.5, 'square', 0.3); }
+function playWin() {
+  [523,659,784,1047].forEach((f,i) => setTimeout(() => playSound(f, 0.3, 'sine', 0.3), i*120));
+}
+function playLose() { playSound(300, 0.3, 'sawtooth', 0.3); playSound(200, 0.5, 'sawtooth', 0.3); }
+function playTimeout() { playSound(440, 0.1); playSound(330, 0.2); }
+
+// ===== STATE =====
+let ws, currentGame = null, roomId, playerIndex;
 let numMyTurn = false, fruMyTurn = false, minMyTurn = false;
 let guessBuffer = [], chooseBuffer = [];
 let fruSelected = [], minSelected = [];
-let fruAttackState = [], fruDefendState = [];
-let myMinHidden = [];
+let fruAttackState = [];
+let myMinHidden = [], myFruHidden = [];
 let minAtkFound = 0, minDefFound = 0;
-
+let opponentName = '';
 const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+function openGame(g) { currentGame = g; showScreen(`screen-${g}-lobby`); }
 
-function openGame(game) {
-  currentGame = game;
-  showScreen(`screen-${game}-lobby`);
-}
-
+// ===== WS =====
 function connectWS() {
   ws = new WebSocket(WS_URL);
-  ws.onopen = () => console.log('WS ulandi');
+  ws.onopen = () => {};
   ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
-  ws.onerror = () => console.log('WS xato');
+  ws.onerror = () => {};
   ws.onclose = () => setTimeout(connectWS, 2000);
 }
 connectWS();
 
+// ===== TAYMER UI =====
+function updateTimerUI(game, timeLeft) {
+  const fill = document.getElementById(`${game}-timer-fill`);
+  const text = document.getElementById(`${game}-timer-text`);
+  if (!fill || !text) return;
+  fill.style.width = `${(timeLeft / 30) * 100}%`;
+  fill.style.background = timeLeft <= 10 ? '#e74c3c' : '#6c63ff';
+  text.textContent = timeLeft;
+  text.className = 'timer-text' + (timeLeft <= 10 ? ' urgent' : '');
+}
+
+// ===== NEON =====
+function setNeon(game, isMyTurn) {
+  const boards = {
+    num: ['chat-box'],
+    fru: ['fru-attack-grid'],
+    min: ['min-attack-grid']
+  };
+  (boards[game] || []).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.toggle('my-turn', isMyTurn);
+    }
+  });
+}
+
+// ===== REAKSIYALAR =====
+function sendReaction(game, emoji) {
+  playClick();
+  ws.send(JSON.stringify({ type: `${game}_reaction`, emoji }));
+  showReaction(emoji, true);
+}
+function showReaction(emoji, isMine) {
+  const el = document.createElement('div');
+  el.className = 'reaction-popup';
+  el.textContent = emoji;
+  el.style.left = (isMine ? 20 : 60) + Math.random() * 30 + '%';
+  el.style.bottom = '30%';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+// ===== KUTISH ANIMATSIYALARI =====
+function buildWaitAnim(game) {
+  const anim = document.getElementById('wait-anim');
+  anim.innerHTML = '';
+  if (game === 'num') {
+    for (let i = 0; i < 4; i++) {
+      const d = document.createElement('div');
+      d.className = 'digit-slot'; d.id = `d${i+1}`; d.textContent = '?';
+      anim.appendChild(d);
+    }
+    startDigitAnim();
+  } else if (game === 'fru') {
+    ['🍎','🍐','🍎','🍐'].forEach(f => {
+      const d = document.createElement('div');
+      d.className = 'fruit-slot'; d.textContent = f;
+      anim.appendChild(d);
+    });
+  } else if (game === 'min') {
+    ['💣','🌸','💣','🌸'].forEach(f => {
+      const d = document.createElement('div');
+      d.className = 'mine-slot'; d.textContent = f;
+      anim.appendChild(d);
+    });
+  }
+}
+function startDigitAnim() {
+  for (let i = 1; i <= 4; i++) {
+    setInterval(() => {
+      const el = document.getElementById(`d${i}`);
+      if (el) el.textContent = Math.floor(Math.random() * 10);
+    }, 150 + Math.random() * 250);
+  }
+}
+
+// ===== MESSAGE HANDLER =====
 function handleMessage(data) {
   if (data.type === 'num_room_list') updateRoomList('num', data.rooms);
   if (data.type === 'fru_room_list') updateRoomList('fru', data.rooms);
   if (data.type === 'min_room_list') updateRoomList('min', data.rooms);
 
+  // TAYMERLAR
+  if (data.type === 'num_timer') { updateTimerUI('num', data.timeLeft); if (data.timeLeft === 5) playTimeout(); }
+  if (data.type === 'fru_timer') { updateTimerUI('fru', data.timeLeft); if (data.timeLeft === 5) playTimeout(); }
+  if (data.type === 'min_timer') { updateTimerUI('min', data.timeLeft); if (data.timeLeft === 5) playTimeout(); }
+
+  // TIMEOUT
+  if (data.type === 'num_timeout') { numMyTurn = data.yourTurn; updateNumTurn(); playTimeout(); }
+  if (data.type === 'fru_timeout') { fruMyTurn = data.yourTurn; updateFruTurn(); playTimeout(); }
+  if (data.type === 'min_timeout') { minMyTurn = data.yourTurn; updateMinTurn(); playTimeout(); }
+
+  // REAKSIYALAR
+  if (data.type === 'num_reaction') showReaction(data.emoji, false);
+  if (data.type === 'fru_reaction') showReaction(data.emoji, false);
+  if (data.type === 'min_reaction') showReaction(data.emoji, false);
+
   // RAQAMLARNI TOP
   if (data.type === 'num_room_created') {
     roomId = data.roomId; playerIndex = 0;
     document.getElementById('wait-room-name').textContent = document.getElementById('room-name-input').value || username;
-    showScreen('screen-wait'); startDigitAnim();
+    buildWaitAnim('num'); showScreen('screen-wait');
   }
   if (data.type === 'num_room_joined') { roomId = data.roomId; playerIndex = data.playerIndex; }
-  if (data.type === 'num_opponent_joined') { chooseBuffer = []; updateChooseDisplay(); showScreen('screen-num-choose'); }
+  if (data.type === 'num_opponent_joined') {
+    chooseBuffer = []; updateChooseDisplay();
+    showScreen('screen-num-choose');
+  }
   if (data.type === 'num_number_set') {
     const btn = document.getElementById('num-confirm-btn');
     btn.textContent = '⏳ Raqib ham son kirityapti...'; btn.disabled = true; btn.style.opacity = '0.6';
   }
-  if (data.type === 'num_game_start') { numMyTurn = data.yourTurn; showScreen('screen-num-game'); updateNumTurn(); }
+  if (data.type === 'num_game_start') {
+    numMyTurn = data.yourTurn; opponentName = data.opponentName || 'Raqib';
+    document.getElementById('num-opp-name').textContent = opponentName;
+    document.getElementById('num-my-name').textContent = username;
+    document.getElementById('chat-box').innerHTML = '';
+    showScreen('screen-num-game'); updateNumTurn();
+  }
   if (data.type === 'num_guess_result') {
     addChatMessage(data); numMyTurn = data.yourTurn; updateNumTurn();
-    if (data.won) data.guesserIdx === playerIndex ? showWin() : showLose();
+    if (data.won) { recordResult(data.guesserIdx === playerIndex); data.guesserIdx === playerIndex ? showWin() : showLose(); }
+    else { data.guesserIdx === playerIndex ? playHit() : playMiss(); }
     guessBuffer = []; updateGuessDisplay();
   }
 
@@ -430,58 +529,78 @@ function handleMessage(data) {
   if (data.type === 'fru_room_created') {
     roomId = data.roomId; playerIndex = 0;
     document.getElementById('wait-room-name').textContent = document.getElementById('room-name-input').value || username;
-    showScreen('screen-wait'); startDigitAnim();
+    buildWaitAnim('fru'); showScreen('screen-wait');
   }
   if (data.type === 'fru_room_joined') { roomId = data.roomId; playerIndex = data.playerIndex; }
-  if (data.type === 'fru_opponent_joined') { fruSelected = []; buildFruChooseGrid(); showScreen('screen-fru-choose'); }
+  if (data.type === 'fru_opponent_joined') {
+    fruSelected = []; myFruHidden = []; buildFruChooseGrid(); showScreen('screen-fru-choose');
+  }
   if (data.type === 'fru_hidden_set') {
     const btn = document.getElementById('fru-confirm-btn');
     btn.textContent = '⏳ Raqib ham yashiryapti...'; btn.disabled = true; btn.style.opacity = '0.6';
   }
   if (data.type === 'fru_game_start') {
-    fruMyTurn = data.yourTurn; fruAttackState = []; fruDefendState = [];
-    buildFruGameGrids(); showScreen('screen-fru-game'); updateFruTurn();
+    fruMyTurn = data.yourTurn; opponentName = data.opponentName || 'Raqib';
+    document.getElementById('fru-opp-name').textContent = opponentName;
+    document.getElementById('fru-my-name').textContent = username;
+    fruAttackState = []; buildFruGameGrids();
+    showScreen('screen-fru-game'); updateFruTurn();
   }
   if (data.type === 'fru_cell_result') {
     fruMyTurn = data.yourTurn;
     fruAttackState.push({ cell: data.cell, hit: data.hit, byMe: data.attackerIdx === playerIndex });
-    if (data.attackerIdx !== playerIndex) fruDefendState.push(data.cell);
-    updateFruGrids(data); updateFruTurn(); updateFruScores(data);
-    if (data.won) data.attackerIdx === playerIndex ? showWin() : showLose();
+    updateFruGrids(data); updateFruTurn(); updateFruScores();
+    if (data.hit) playHit(); else playMiss();
+    if (data.won) { recordResult(data.attackerIdx === playerIndex); data.attackerIdx === playerIndex ? showWin() : showLose(); }
   }
 
   // MINALAR
   if (data.type === 'min_room_created') {
     roomId = data.roomId; playerIndex = 0;
     document.getElementById('wait-room-name').textContent = document.getElementById('room-name-input').value || username;
-    showScreen('screen-wait'); startDigitAnim();
+    buildWaitAnim('min'); showScreen('screen-wait');
   }
   if (data.type === 'min_room_joined') { roomId = data.roomId; playerIndex = data.playerIndex; }
-  if (data.type === 'min_opponent_joined') { minSelected = []; buildMinChooseGrid(); showScreen('screen-min-choose'); }
+  if (data.type === 'min_opponent_joined') {
+    minSelected = []; myMinHidden = []; buildMinChooseGrid(); showScreen('screen-min-choose');
+  }
   if (data.type === 'min_mines_set') {
     const btn = document.getElementById('min-confirm-btn');
     btn.textContent = '⏳ Raqib ham yashiryapti...'; btn.disabled = true; btn.style.opacity = '0.6';
   }
   if (data.type === 'min_game_start') {
-    minMyTurn = data.yourTurn; minAtkFound = 0; minDefFound = 0;
+    minMyTurn = data.yourTurn; opponentName = data.opponentName || 'Raqib';
+    document.getElementById('min-opp-name').textContent = opponentName;
+    document.getElementById('min-my-name').textContent = username;
+    minAtkFound = 0; minDefFound = 0;
     buildMinGameGrids(); showScreen('screen-min-game'); updateMinTurn(); updateMinCounters();
   }
   if (data.type === 'min_cell_result') {
     minMyTurn = data.yourTurn;
-    updateMinGrids(data); updateMinTurn();
-    if (data.attackerIdx === playerIndex && data.isMine) minAtkFound++;
-    if (data.attackerIdx !== playerIndex && data.isMine) minDefFound++;
-    updateMinCounters();
-    if (data.lost) {
-      // loser = 4 ta mina topgan odam
-      data.loserIdx === playerIndex ? showLose() : showWin();
-    }
+    if (data.attackerIdx === playerIndex && data.isMine) { minAtkFound++; playMine(); }
+    else if (data.attackerIdx !== playerIndex && data.isMine) { minDefFound++; playMine(); }
+    else playMiss();
+    updateMinGrids(data); updateMinTurn(); updateMinCounters();
+    if (data.lost) { recordResult(data.loserIdx !== playerIndex); data.loserIdx === playerIndex ? showLose() : showWin(); }
   }
 
   if (data.type === 'opponent_left') { alert('Raqibingiz o\'yindan chiqdi!'); backToLobby(); }
   if (data.type === 'error') alert(data.msg);
 }
 
+// ===== STATISTIKA =====
+function recordResult(won) {
+  stats.total++;
+  if (won) {
+    stats.win++; stats.streak++;
+    if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+  } else {
+    stats.lose++; stats.streak = 0;
+  }
+  saveStats(); updateStatsUI();
+}
+
+// ===== ROOM LIST =====
 function updateRoomList(game, rooms) {
   const listEl = document.getElementById(`${game}-room-list`);
   const emptyEl = document.getElementById(`${game}-empty-rooms`);
@@ -492,12 +611,8 @@ function updateRoomList(game, rooms) {
     const card = document.createElement('div');
     card.className = 'room-card';
     card.innerHTML = `
-      <div>
-        <div class="room-card-name">${icons[game]} ${room.name}</div>
-        <div class="room-card-host">${room.host} kutmoqda</div>
-      </div>
-      <button class="room-card-join" onclick="joinRoom('${game}','${room.id}')">Kirish</button>
-    `;
+      <div><div class="room-card-name">${icons[game]} ${room.name}</div><div class="room-card-host">${room.host} kutmoqda</div></div>
+      <button class="room-card-join" onclick="joinRoom('${game}','${room.id}')">Kirish</button>`;
     listEl.appendChild(card);
   });
 }
@@ -513,13 +628,13 @@ function showCreateModal(game) {
 function hideModal() { document.getElementById('create-modal').style.display = 'none'; }
 function createRoom() {
   const name = document.getElementById('room-name-input').value.trim() || username;
-  hideModal();
+  hideModal(); playClick();
   ws.send(JSON.stringify({ type: `${modalGame}_create_room`, username, name }));
 }
 document.getElementById('modal-confirm-btn').onclick = createRoom;
 
 function joinRoom(game, id) {
-  currentGame = game;
+  currentGame = game; playClick();
   ws.send(JSON.stringify({ type: `${game}_join_room`, roomId: id, username }));
   if (game === 'num') { chooseBuffer = []; showScreen('screen-num-choose'); }
 }
@@ -534,10 +649,14 @@ function backToLobby() {
   document.querySelectorAll('.result-overlay').forEach(o => o.remove());
   roomId = null; playerIndex = null;
   chooseBuffer = []; guessBuffer = [];
-  fruSelected = []; fruAttackState = []; fruDefendState = [];
+  fruSelected = []; fruAttackState = [];
   minSelected = []; myMinHidden = [];
   const nb = document.getElementById('num-confirm-btn');
   nb.textContent = '✅ Tasdiqlash'; nb.disabled = false; nb.style.opacity = '1';
+  const fb = document.getElementById('fru-confirm-btn');
+  fb.textContent = '✅ Tasdiqlash (0/3)'; fb.disabled = false; fb.style.opacity = '1';
+  const mb = document.getElementById('min-confirm-btn');
+  mb.textContent = '✅ Tasdiqlash (0/4)'; mb.disabled = false; mb.style.opacity = '1';
   showScreen(currentGame ? `screen-${currentGame}-lobby` : 'screen-menu');
 }
 
@@ -545,17 +664,9 @@ function shareApp() {
   tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/raqamlarniTOPbot')}&text=${encodeURIComponent('O\'yinlar o\'ynaylik! 🎮')}`);
 }
 
-function startDigitAnim() {
-  ['d1','d2','d3','d4'].forEach(id => {
-    setInterval(() => {
-      document.getElementById(id).textContent = Math.floor(Math.random() * 10);
-    }, 150 + Math.random() * 250);
-  });
-}
-
 // ===== RAQAMLARNI TOP =====
-function numPress(n) { if (chooseBuffer.length < 4) { chooseBuffer.push(n); updateChooseDisplay(); } }
-function numDel() { chooseBuffer.pop(); updateChooseDisplay(); }
+function numPress(n) { playClick(); if (chooseBuffer.length < 4) { chooseBuffer.push(n); updateChooseDisplay(); } }
+function numDel() { playClick(); chooseBuffer.pop(); updateChooseDisplay(); }
 function updateChooseDisplay() {
   for (let i = 0; i < 4; i++) {
     const b = document.getElementById('nb' + i);
@@ -565,10 +676,10 @@ function updateChooseDisplay() {
 }
 function confirmNumber() {
   if (chooseBuffer.length < 4) return alert('4 ta raqam kiriting!');
-  ws.send(JSON.stringify({ type: 'num_set_number', number: chooseBuffer.join('') }));
+  playClick(); ws.send(JSON.stringify({ type: 'num_set_number', number: chooseBuffer.join('') }));
 }
-function guessPress(n) { if (numMyTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
-function guessDel() { guessBuffer.pop(); updateGuessDisplay(); }
+function guessPress(n) { playClick(); if (numMyTurn && guessBuffer.length < 4) { guessBuffer.push(n); updateGuessDisplay(); } }
+function guessDel() { playClick(); guessBuffer.pop(); updateGuessDisplay(); }
 function updateGuessDisplay() {
   for (let i = 0; i < 4; i++) {
     const b = document.getElementById('gb' + i);
@@ -584,7 +695,9 @@ function sendGuess() {
 function updateNumTurn() {
   const el = document.getElementById('num-turn-text');
   el.textContent = numMyTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
-  el.className = 'turn-bar' + (numMyTurn ? ' my-turn' : '');
+  el.className = 'timer-text' + (numMyTurn ? '' : '');
+  el.style.color = numMyTurn ? '#39ff14' : '#666';
+  setNeon('num', numMyTurn);
 }
 function addChatMessage(data) {
   const chat = document.getElementById('chat-box');
@@ -599,7 +712,7 @@ function addChatMessage(data) {
     cell.textContent = r === '_' ? data.guess[i] : r;
     row.appendChild(cell);
   });
-  div.innerHTML = `<div style="font-size:10px;opacity:0.6;margin-bottom:3px">${isMe ? 'Siz' : 'Raqib'}: ${data.guess}</div>`;
+  div.innerHTML = `<div style="font-size:10px;opacity:0.6;margin-bottom:3px">${isMe ? 'Siz' : opponentName}: ${data.guess}</div>`;
   div.appendChild(row);
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
@@ -611,15 +724,15 @@ function buildFruChooseGrid() {
   grid.innerHTML = '';
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
-    cell.className = 'cell'; cell.textContent = '❓';
-    cell.onclick = () => toggleFruCell(i, cell);
+    cell.className = 'cell'; cell.textContent = '';
+    cell.onclick = () => { playClick(); toggleFruCell(i, cell); };
     grid.appendChild(cell);
   }
 }
 function toggleFruCell(idx, el) {
   if (fruSelected.includes(idx)) {
     fruSelected = fruSelected.filter(i => i !== idx);
-    el.classList.remove('selected'); el.textContent = '❓';
+    el.classList.remove('selected'); el.textContent = '';
   } else {
     if (fruSelected.length >= 3) return;
     fruSelected.push(idx); el.classList.add('selected'); el.textContent = '🍐';
@@ -628,15 +741,16 @@ function toggleFruCell(idx, el) {
 }
 function confirmFruHidden() {
   if (fruSelected.length < 3) return alert('3 ta katakcha tanlang!');
-  ws.send(JSON.stringify({ type: 'fru_set_hidden', cells: fruSelected }));
+  myFruHidden = [...fruSelected]; playClick();
+  ws.send(JSON.stringify({ type: 'fru_set_hidden', cells: myFruHidden }));
 }
 function buildFruGameGrids() {
   const ag = document.getElementById('fru-attack-grid');
   ag.innerHTML = '';
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
-    cell.className = 'cell'; cell.id = `fatk-${i}`; cell.textContent = '❓';
-    cell.onclick = () => { if (fruMyTurn) ws.send(JSON.stringify({ type: 'fru_open_cell', cell: i })); };
+    cell.className = 'cell'; cell.id = `fatk-${i}`; cell.textContent = '';
+    cell.onclick = () => { if (fruMyTurn) { playClick(); ws.send(JSON.stringify({ type: 'fru_open_cell', cell: i })); } };
     ag.appendChild(cell);
   }
   const dg = document.getElementById('fru-defend-grid');
@@ -644,7 +758,7 @@ function buildFruGameGrids() {
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell disabled'; cell.id = `fdef-${i}`;
-    cell.textContent = fruSelected.includes(i) ? '🍐' : '';
+    cell.textContent = myFruHidden.includes(i) ? '🍐' : '';
     dg.appendChild(cell);
   }
 }
@@ -654,19 +768,20 @@ function updateFruGrids(data) {
     if (c) { c.classList.add(data.hit ? 'hit' : 'miss'); c.textContent = data.hit ? '🍎' : '🌸'; }
   } else {
     const c = document.getElementById(`fdef-${data.cell}`);
-    if (c) { if (data.hit) { c.textContent = '💥'; c.style.opacity='0.5'; } }
+    if (c) { if (data.hit) { c.textContent = '💥'; c.style.opacity = '0.5'; } else { c.textContent = '🌸'; } }
   }
 }
-function updateFruScores(data) {
+function updateFruScores() {
   const myH = fruAttackState.filter(s => s.hit && s.byMe).length;
   const opH = fruAttackState.filter(s => s.hit && !s.byMe).length;
   document.getElementById('fru-opp-score').textContent = `${myH}/3`;
-  document.getElementById('fru-my-score').textContent = `${opH}/3 ochildi`;
+  document.getElementById('fru-my-score').textContent = `${opH}/3`;
 }
 function updateFruTurn() {
   const el = document.getElementById('fru-turn-text');
   el.textContent = fruMyTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
-  el.className = 'turn-bar' + (fruMyTurn ? ' my-turn' : '');
+  el.style.color = fruMyTurn ? '#39ff14' : '#666';
+  setNeon('fru', fruMyTurn);
   document.querySelectorAll('#fru-attack-grid .cell').forEach(c => {
     if (!c.classList.contains('hit') && !c.classList.contains('miss'))
       c.style.opacity = fruMyTurn ? '1' : '0.6';
@@ -680,7 +795,7 @@ function buildMinChooseGrid() {
   for (let i = 0; i < 16; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell'; cell.textContent = '';
-    cell.onclick = () => toggleMinCell(i, cell);
+    cell.onclick = () => { playClick(); toggleMinCell(i, cell); };
     grid.appendChild(cell);
   }
 }
@@ -696,7 +811,7 @@ function toggleMinCell(idx, el) {
 }
 function confirmMinHidden() {
   if (minSelected.length < 4) return alert('4 ta katakcha tanlang!');
-  myMinHidden = [...minSelected];
+  myMinHidden = [...minSelected]; playClick();
   ws.send(JSON.stringify({ type: 'min_set_mines', cells: myMinHidden }));
 }
 function buildMinGameGrids() {
@@ -709,7 +824,7 @@ function buildMinGameGrids() {
       if (!minMyTurn) return;
       const c = document.getElementById(`matk-${i}`);
       if (c.classList.contains('mine-found') || c.classList.contains('safe')) return;
-      ws.send(JSON.stringify({ type: 'min_open_cell', cell: i }));
+      playClick(); ws.send(JSON.stringify({ type: 'min_open_cell', cell: i }));
     };
     ag.appendChild(cell);
   }
@@ -725,61 +840,61 @@ function buildMinGameGrids() {
 function updateMinGrids(data) {
   if (data.attackerIdx === playerIndex) {
     const c = document.getElementById(`matk-${data.cell}`);
-    if (c) {
-      c.classList.add(data.isMine ? 'mine-found' : 'safe');
-      c.textContent = data.isMine ? '💥' : '🌸';
-    }
+    if (c) { c.classList.add(data.isMine ? 'mine-found' : 'safe'); c.textContent = data.isMine ? '💥' : '🌸'; }
   } else {
     const c = document.getElementById(`mdef-${data.cell}`);
-    if (c) {
-      if (data.isMine) { c.textContent = '💥'; c.style.opacity = '0.5'; }
-      else { c.textContent = '🌸'; }
-    }
+    if (c) { c.textContent = data.isMine ? '💥' : '🌸'; if (data.isMine) c.style.opacity = '0.5'; }
   }
 }
 function updateMinTurn() {
   const el = document.getElementById('min-turn-text');
   el.textContent = minMyTurn ? '✨ Sizning navbat' : '⏳ Raqib o\'ylayapti';
-  el.className = 'turn-bar' + (minMyTurn ? ' my-turn' : '');
+  el.style.color = minMyTurn ? '#39ff14' : '#666';
+  setNeon('min', minMyTurn);
   document.querySelectorAll('#min-attack-grid .cell').forEach(c => {
     if (!c.classList.contains('mine-found') && !c.classList.contains('safe'))
       c.style.opacity = minMyTurn ? '1' : '0.6';
   });
 }
 function updateMinCounters() {
-  const atkEl = document.getElementById('min-atk-counter');
-  const defEl = document.getElementById('min-def-counter');
-  atkEl.innerHTML = '';
-  defEl.innerHTML = '';
-  for (let i = 0; i < 4; i++) {
-    const d1 = document.createElement('div');
-    d1.className = 'mine-dot' + (i < minAtkFound ? ' found' : '');
-    atkEl.appendChild(d1);
-    const d2 = document.createElement('div');
-    d2.className = 'mine-dot' + (i < minDefFound ? ' found' : '');
-    defEl.appendChild(d2);
-  }
+  ['atk','def'].forEach((t, ti) => {
+    const el = document.getElementById(`min-${t}-counter`);
+    if (!el) return;
+    el.innerHTML = '';
+    const found = ti === 0 ? minAtkFound : minDefFound;
+    for (let i = 0; i < 4; i++) {
+      const d = document.createElement('div');
+      d.className = 'mine-dot' + (i < found ? ' found' : '');
+      el.appendChild(d);
+    }
+  });
 }
 
 // ===== G'ALABA / YUTQIZISH =====
 function showWin() {
+  playWin();
   const o = document.createElement('div');
   o.className = 'result-overlay';
-  o.innerHTML = '<h2>🎉 Yutdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
+  o.innerHTML = `<h2>🏆 Siz yutdingiz!</h2>
+    <p style="color:#38ef7d;font-size:14px">🔥 ${stats.streak} ta ketma-ket!</p>
+    <button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>`;
   document.body.appendChild(o);
   startConfetti();
 }
 function showLose() {
+  playLose();
   const o = document.createElement('div');
   o.className = 'result-overlay';
-  o.innerHTML = '<h2>💔 Yutqizdingiz!</h2><button class="btn" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>';
+  o.innerHTML = `<h2>😞 Yutqizdingiz!</h2>
+    <button class="btn secondary" onclick="backToLobby()" style="width:220px">Lobbyga qaytish</button>`;
   document.body.appendChild(o);
 }
+
 function startConfetti() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  const pieces = Array.from({length: 100}, () => ({
+  const pieces = Array.from({length: 120}, () => ({
     x: Math.random() * canvas.width, y: -20,
     r: Math.random() * 6 + 3,
     color: `hsl(${Math.random()*360},90%,60%)`,
@@ -800,3 +915,6 @@ function startConfetti() {
 </script>
 </body>
 </html>
+```
+
+**"Commit changes"** bosing! Render deploy qilgach sinab ko'ring! 🚀
