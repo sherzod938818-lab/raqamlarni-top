@@ -15,12 +15,10 @@ const server = http.createServer((req, res) => {
 
 const wss = new WebSocket.Server({ server });
 
-// ========== RAQAMLARNI TOP ==========
 const numRooms = {};
-// ========== TOLMANAK ==========
 const fruRooms = {};
-
-const playerRoom = new Map(); // ws -> { game, roomId }
+const minRooms = {};
+const playerRoom = new Map();
 
 function sendTo(ws, data) {
   if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(data));
@@ -30,7 +28,7 @@ function randomId() {
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
-// ===== RAQAMLARNI TOP logika =====
+// ===== RAQAMLARNI TOP =====
 function broadcastNumRooms() {
   const list = Object.entries(numRooms)
     .filter(([, r]) => r.players.length === 1)
@@ -48,7 +46,7 @@ function checkGuess(secret, guess) {
   return result;
 }
 
-// ===== TOLMANAK logika =====
+// ===== TOLMANAK =====
 function broadcastFruRooms() {
   const list = Object.entries(fruRooms)
     .filter(([, r]) => r.players.length === 1)
@@ -59,8 +57,18 @@ function broadcastFruRooms() {
   });
 }
 
+// ===== MINALAR =====
+function broadcastMinRooms() {
+  const list = Object.entries(minRooms)
+    .filter(([, r]) => r.players.length === 1)
+    .map(([id, r]) => ({ id, name: r.name, host: r.usernames[0] }));
+  wss.clients.forEach(c => {
+    if (c.readyState === WebSocket.OPEN)
+      c.send(JSON.stringify({ type: 'min_room_list', rooms: list }));
+  });
+}
+
 wss.on('connection', (ws) => {
-  // Yangi ulanuvchiga ikki o'yin xonalarini yuborish
   const numList = Object.entries(numRooms)
     .filter(([, r]) => r.players.length === 1)
     .map(([id, r]) => ({ id, name: r.name, host: r.usernames[0] }));
@@ -70,6 +78,11 @@ wss.on('connection', (ws) => {
     .filter(([, r]) => r.players.length === 1)
     .map(([id, r]) => ({ id, name: r.name, host: r.usernames[0] }));
   sendTo(ws, { type: 'fru_room_list', rooms: fruList });
+
+  const minList = Object.entries(minRooms)
+    .filter(([, r]) => r.players.length === 1)
+    .map(([id, r]) => ({ id, name: r.name, host: r.usernames[0] }));
+  sendTo(ws, { type: 'min_room_list', rooms: minList });
 
   ws.on('message', (message) => {
     let data;
@@ -87,7 +100,6 @@ wss.on('connection', (ws) => {
       sendTo(ws, { type: 'num_room_created', roomId, playerIndex: 0 });
       broadcastNumRooms();
     }
-
     else if (data.type === 'num_join_room') {
       const room = numRooms[data.roomId];
       if (!room) return sendTo(ws, { type: 'error', msg: 'Xona topilmadi' });
@@ -100,7 +112,6 @@ wss.on('connection', (ws) => {
       sendTo(ws, { type: 'num_opponent_joined', opponentName: room.usernames[0] });
       broadcastNumRooms();
     }
-
     else if (data.type === 'num_set_number') {
       const pr = playerRoom.get(ws);
       const room = pr && numRooms[pr.roomId];
@@ -113,7 +124,6 @@ wss.on('connection', (ws) => {
         sendTo(room.players[1], { type: 'num_game_start', yourTurn: false });
       }
     }
-
     else if (data.type === 'num_guess') {
       const pr = playerRoom.get(ws);
       const room = pr && numRooms[pr.roomId];
@@ -123,7 +133,6 @@ wss.on('connection', (ws) => {
       const secret = room.numbers[defenderIdx];
       const result = checkGuess(secret.split(''), data.number.split(''));
       const won = result.join('') === secret;
-      room.guesses.push({ player: attackerIdx, guess: data.number, result });
       room.players.forEach((p, i) => {
         sendTo(p, {
           type: 'num_guess_result',
@@ -147,15 +156,12 @@ wss.on('connection', (ws) => {
       fruRooms[roomId] = {
         name: data.name || data.username,
         players: [ws], usernames: [data.username],
-        hidden: [null, null], // har o'yinchining yashirin katakchalari
-        board: [null, null],  // har o'yinchining taxtasi [ochilgan katakchalar]
-        currentTurn: 0
+        hidden: [null, null], board: [null, null], currentTurn: 0
       };
       playerRoom.set(ws, { game: 'fru', roomId });
       sendTo(ws, { type: 'fru_room_created', roomId, playerIndex: 0 });
       broadcastFruRooms();
     }
-
     else if (data.type === 'fru_join_room') {
       const room = fruRooms[data.roomId];
       if (!room) return sendTo(ws, { type: 'error', msg: 'Xona topilmadi' });
@@ -168,46 +174,36 @@ wss.on('connection', (ws) => {
       sendTo(ws, { type: 'fru_opponent_joined', opponentName: room.usernames[0] });
       broadcastFruRooms();
     }
-
     else if (data.type === 'fru_set_hidden') {
-      // O'yinchi o'z yashirin katakchalarini yuboradi [0-8 indekslar, 3 ta]
       const pr = playerRoom.get(ws);
       const room = pr && fruRooms[pr.roomId];
       if (!room) return;
       const idx = room.players.indexOf(ws);
-      room.hidden[idx] = data.cells; // [2, 5, 7] kabi
-      room.board[idx] = []; // ochilgan katakchalar
+      room.hidden[idx] = data.cells;
+      room.board[idx] = [];
       sendTo(ws, { type: 'fru_hidden_set' });
       if (room.hidden[0] && room.hidden[1]) {
         sendTo(room.players[0], { type: 'fru_game_start', yourTurn: true });
         sendTo(room.players[1], { type: 'fru_game_start', yourTurn: false });
       }
     }
-
     else if (data.type === 'fru_open_cell') {
       const pr = playerRoom.get(ws);
       const room = pr && fruRooms[pr.roomId];
       if (!room) return;
       const attackerIdx = room.players.indexOf(ws);
       const defenderIdx = 1 - attackerIdx;
-      const cell = data.cell; // 0-8
+      const cell = data.cell;
       const hit = room.hidden[defenderIdx].includes(cell);
-
-      if (!room.board[defenderIdx].includes(cell)) {
-        room.board[defenderIdx].push(cell);
-      }
-
+      if (!room.board[defenderIdx].includes(cell)) room.board[defenderIdx].push(cell);
       const won = room.hidden[defenderIdx].every(c => room.board[defenderIdx].includes(c));
-
       room.players.forEach((p, i) => {
         sendTo(p, {
           type: 'fru_cell_result',
-          attackerIdx,
-          cell, hit, won,
+          attackerIdx, cell, hit, won,
           yourTurn: won ? false : (!hit ? i === defenderIdx : i === attackerIdx)
         });
       });
-
       if (won) {
         delete fruRooms[pr.roomId];
         room.players.forEach(p => playerRoom.delete(p));
@@ -216,20 +212,97 @@ wss.on('connection', (ws) => {
         room.currentTurn = hit ? attackerIdx : defenderIdx;
       }
     }
+
+    // ===== MINALAR =====
+    else if (data.type === 'min_create_room') {
+      const roomId = randomId();
+      minRooms[roomId] = {
+        name: data.name || data.username,
+        players: [ws], usernames: [data.username],
+        mines: [null, null],
+        opened: [[], []],
+        minesFound: [0, 0],
+        currentTurn: 0
+      };
+      playerRoom.set(ws, { game: 'min', roomId });
+      sendTo(ws, { type: 'min_room_created', roomId, playerIndex: 0 });
+      broadcastMinRooms();
+    }
+    else if (data.type === 'min_join_room') {
+      const room = minRooms[data.roomId];
+      if (!room) return sendTo(ws, { type: 'error', msg: 'Xona topilmadi' });
+      if (room.players.length >= 2) return sendTo(ws, { type: 'error', msg: 'Xona to\'liq' });
+      room.players.push(ws);
+      room.usernames.push(data.username);
+      playerRoom.set(ws, { game: 'min', roomId: data.roomId });
+      sendTo(ws, { type: 'min_room_joined', roomId: data.roomId, playerIndex: 1 });
+      sendTo(room.players[0], { type: 'min_opponent_joined', opponentName: data.username });
+      sendTo(ws, { type: 'min_opponent_joined', opponentName: room.usernames[0] });
+      broadcastMinRooms();
+    }
+    else if (data.type === 'min_set_mines') {
+      const pr = playerRoom.get(ws);
+      const room = pr && minRooms[pr.roomId];
+      if (!room) return;
+      const idx = room.players.indexOf(ws);
+      room.mines[idx] = data.cells;
+      sendTo(ws, { type: 'min_mines_set' });
+      if (room.mines[0] && room.mines[1]) {
+        sendTo(room.players[0], { type: 'min_game_start', yourTurn: true });
+        sendTo(room.players[1], { type: 'min_game_start', yourTurn: false });
+      }
+    }
+    else if (data.type === 'min_open_cell') {
+      const pr = playerRoom.get(ws);
+      const room = pr && minRooms[pr.roomId];
+      if (!room) return;
+      const attackerIdx = room.players.indexOf(ws);
+      const defenderIdx = 1 - attackerIdx;
+      const cell = data.cell;
+      const isMine = room.mines[defenderIdx].includes(cell);
+
+      if (!room.opened[defenderIdx].includes(cell))
+        room.opened[defenderIdx].push(cell);
+
+      if (isMine) room.minesFound[attackerIdx]++;
+
+      // Kim 4 ta minani topsa — yutqizadi
+      const lost = room.minesFound[attackerIdx] >= 4;
+
+      room.players.forEach((p, i) => {
+        sendTo(p, {
+          type: 'min_cell_result',
+          attackerIdx, cell, isMine,
+          minesFound: room.minesFound,
+          // Mina topsa yana o'zi ochadi, topolmasa navbat o'tadi
+          yourTurn: lost ? false : (isMine ? i === attackerIdx : i === defenderIdx),
+          lost,
+          loserIdx: lost ? attackerIdx : -1
+        });
+      });
+
+      if (lost) {
+        delete minRooms[pr.roomId];
+        room.players.forEach(p => playerRoom.delete(p));
+        broadcastMinRooms();
+      } else {
+        room.currentTurn = isMine ? attackerIdx : defenderIdx;
+      }
+    }
   });
 
   ws.on('close', () => {
     const pr = playerRoom.get(ws);
     if (pr) {
-      const rooms = pr.game === 'num' ? numRooms : fruRooms;
-      const broadcast = pr.game === 'num' ? broadcastNumRooms : broadcastFruRooms;
-      const room = rooms[pr.roomId];
+      const roomsMap = pr.game === 'num' ? numRooms : pr.game === 'fru' ? fruRooms : minRooms;
+      const broadcast = pr.game === 'num' ? broadcastNumRooms : pr.game === 'fru' ? broadcastFruRooms : broadcastMinRooms;
+      const room = roomsMap[pr.roomId];
       if (room) {
         room.players.forEach(p => {
           if (p !== ws) sendTo(p, { type: 'opponent_left' });
           playerRoom.delete(p);
         });
-        delete rooms[pr.roomId];
+        delete roomsMap[pr.roomId];
         broadcast();
       }
     }
