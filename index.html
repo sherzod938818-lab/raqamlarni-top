@@ -368,7 +368,8 @@ let fruSelected = [], minSelected = [];
 let fruAttackState = [];
 let myMinHidden = [], myFruHidden = [];
 let minAtkFound = 0, minDefFound = 0;
-let opponentName = '';
+let opponentName = ''; 
+let confettiRunning = false;
 let cellLocked = false; // tez bosish bloki
 
 const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
@@ -619,6 +620,7 @@ function leaveRoom() {
 }
 
 function backToLobby() {
+  confettiRunning = false;
   document.querySelectorAll('.result-overlay').forEach(o => o.remove());
   roomId = null; playerIndex = null; cellLocked = false;
   chooseBuffer = []; guessBuffer = [];
@@ -637,6 +639,7 @@ function backToLobby() {
 }
 function confirmBackToMenu() {
   if (confirm('O\'yindan chiqmoqchimisiz? Hozirgi o\'yin bekor bo\'ladi.')) {
+    confettiRunning = false;
     if (ws) ws.close();
     setTimeout(connectWS, 300);
     roomId = null; playerIndex = null; cellLocked = false;
@@ -879,6 +882,7 @@ function showLose() {
 }
 
 function startConfetti() {
+  confettiRunning = true;
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -888,6 +892,10 @@ function startConfetti() {
     speed: Math.random()*4+2, angle: Math.random()*360
   }));
   function draw() {
+    if (!confettiRunning) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pieces.forEach(p => {
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
