@@ -226,7 +226,7 @@
 
 <!-- RAQAMLARNI TOP: O'YIN -->
 <div class="screen" id="screen-num-game">
-  <div class="opponent-bar"><span class="my-name" id="num-my-name">Sen</span><span id="num-opp-name" class="opponent-name"></span></div>
+  <div class="opponent-bar"><button class="reaction-btn" style="padding:4px 8px;font-size:14px" onclick="confirmBackToMenu()">🏠</button><span class="my-name" id="num-my-name">Sen</span><span id="num-opp-name" class="opponent-name"></span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
     <span id="num-turn-text" class="timer-text">...</span>
     <span id="num-timer-text" class="timer-text">30</span>
@@ -262,7 +262,7 @@
 
 <!-- TOLMANAK: O'YIN -->
 <div class="screen" id="screen-fru-game">
-  <div class="opponent-bar"><span class="my-name" id="fru-my-name">Sen</span><span id="fru-opp-name" class="opponent-name"></span></div>
+  <div class="opponent-bar"><button class="reaction-btn" style="padding:4px 8px;font-size:14px" onclick="confirmBackToMenu()">🏠</button><span class="my-name" id="fru-my-name">Sen</span><span id="fru-opp-name" class="opponent-name"></span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
     <span id="fru-turn-text" class="timer-text">...</span>
     <span id="fru-timer-text" class="timer-text">30</span>
@@ -296,7 +296,7 @@
 
 <!-- MINALAR: O'YIN -->
 <div class="screen" id="screen-min-game">
-  <div class="opponent-bar"><span class="my-name" id="min-my-name">Sen</span><span id="min-opp-name" class="opponent-name"></span></div>
+  <div class="opponent-bar"><button class="reaction-btn" style="padding:4px 8px;font-size:14px" onclick="confirmBackToMenu()">🏠</button><span class="my-name" id="min-my-name">Sen</span><span id="min-opp-name" class="opponent-name"></span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:2px">
     <span id="min-turn-text" class="timer-text">...</span>
     <span id="min-timer-text" class="timer-text">30</span>
@@ -372,6 +372,7 @@ let opponentName = '';
 let cellLocked = false; // tez bosish bloki
 
 const username = tg.initDataUnsafe?.user?.first_name || 'O\'yinchi';
+function fruitFor(idx) { return idx === 0 ? '🍐' : '🍎'; }
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -392,6 +393,7 @@ connectWS();
 // BOT BILAN O'YNASH
 function startVsBot(game) {
   currentGame = game;
+  playerIndex = 0;
   playClick();
   ws.send(JSON.stringify({ type: `${game}_vs_bot`, username }));
 }
@@ -633,7 +635,15 @@ function backToLobby() {
   if (gb) { gb.disabled = false; gb.style.opacity = '1'; gb.textContent = '🔍 Taxmin'; }
   showScreen(currentGame ? `screen-${currentGame}-lobby` : 'screen-menu');
 }
-
+function confirmBackToMenu() {
+  if (confirm('O\'yindan chiqmoqchimisiz? Hozirgi o\'yin bekor bo\'ladi.')) {
+    if (ws) ws.close();
+    setTimeout(connectWS, 300);
+    roomId = null; playerIndex = null; cellLocked = false;
+    currentGame = null;
+    showScreen('screen-menu');
+  }
+}
 function shareApp() {
   tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/raqamlarniTOPbot')}&text=${encodeURIComponent('O\'yinlar o\'ynaylik! 🎮')}`);
 }
@@ -738,14 +748,15 @@ function buildFruGameGrids() {
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell disabled'; cell.id = `fdef-${i}`;
-    cell.textContent = myFruHidden.includes(i) ? '🍐' : '';
+    cell.textContent = myFruHidden.includes(i) ? fruitFor(playerIndex) : '';
     dg.appendChild(cell);
   }
 }
 function updateFruGrids(data) {
+  const oppFruit = fruitFor(1 - playerIndex);
   if (data.attackerIdx === playerIndex) {
     const c = document.getElementById(`fatk-${data.cell}`);
-    if (c) { c.classList.add(data.hit ? 'hit' : 'miss'); c.textContent = data.hit ? '🍎' : '🌸'; }
+    if (c) { c.classList.add(data.hit ? 'hit' : 'miss'); c.textContent = data.hit ? oppFruit : '🌸'; }
   } else {
     const c = document.getElementById(`fdef-${data.cell}`);
     if (c) { if (data.hit) { c.textContent = '💥'; c.style.opacity = '0.5'; } else { c.textContent = '🌸'; } }
